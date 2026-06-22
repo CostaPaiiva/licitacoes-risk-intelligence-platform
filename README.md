@@ -1,56 +1,50 @@
-# Licitações Risk Intelligence Platform
+# Licitacoes Risk Intelligence Platform
 
-Plataforma de inteligência analítica para análise de licitações públicas, identificação de padrões suspeitos, detecção de anomalias e classificação de risco em contratos públicos.
+## Acesso local
 
-## Objetivo
+O projeto sobe dois servicos via Docker Compose:
 
-Este projeto tem como objetivo construir uma solução completa de dados aplicada ao contexto de compras públicas e licitações. A plataforma realiza extração, tratamento, carga em banco PostgreSQL, análises SQL, detecção de anomalias com Machine Learning e visualização em dashboard interativo.
+- `postgres`: banco PostgreSQL
+- `pgadmin`: interface web para administrar o banco
 
-## Tecnologias utilizadas
+## Credenciais padrao
 
-- Python
-- Pandas
-- PostgreSQL
-- Docker
-- SQLAlchemy
-- Scikit-learn
-- Streamlit
-- Plotly
-- SQL
+### pgAdmin
 
-## Principais funcionalidades
+- URL: `http://localhost:8081`
+- Email: `admin@admin.com`
+- Senha: `admin`
 
-- Extração de dados de licitações
-- Tratamento e padronização dos dados
-- Modelagem analítica em PostgreSQL
-- Consultas SQL para indicadores de negócio
-- Dashboard interativo em Streamlit
-- Detecção de anomalias
-- Classificação de risco
-- Clusterização de fornecedores
+### PostgreSQL
 
-## Indicadores analisados
+- Host: `localhost` quando acessado da maquina host
+- Porta: `5432`
+- Usuario: `admin`
+- Senha: `admin`
+- Banco: `licitacoes_db`
 
-- Valor total contratado por órgão
-- Fornecedores mais recorrentes
-- Compras por categoria
-- Evolução mensal dos contratos
-- Contratos com valores acima da média
-- Licitações com maior score de risco
-- Concentração de fornecedores por órgão
+## Se o login do pgAdmin nao entrar
 
-## Estrutura do projeto
+O pgAdmin pode ter ficado com estado antigo em um container ja criado. Nesse caso, recrie tudo com:
 
-```txt
-licitacoes-risk-intelligence-platform/
-├── data/
-├── database/
-├── docker/
-├── notebooks/
-├── src/
-├── sql/
-├── dashboard/
-├── docs/
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+Depois tente novamente:
+
+- `admin@admin.com`
+- `admin`
+
+## Se o pgAdmin abrir, mas a conexao com o banco falhar
+
+Ao cadastrar o servidor do PostgreSQL dentro do pgAdmin, use:
+
+- Host name/address: `postgres`
+- Port: `5432`
+- Maintenance database: `licitacoes_db`
+- Username: `admin`
+- Password: `admin`
+
+Isso funciona porque o `pgAdmin` fala com o banco pela rede interna do Docker, nao por `localhost`.
