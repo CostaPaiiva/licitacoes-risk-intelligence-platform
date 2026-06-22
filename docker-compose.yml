@@ -24,7 +24,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com # Email de login para acesso à interface web
       PGADMIN_DEFAULT_PASSWORD: admin # Senha de login para acesso à interface web
     ports:
-      - "8080:80" # Mapeia a porta 80 da interface do pgAdmin para a porta 8080 do host
+      - "8081:80" # Mapeia a porta 80 da interface do pgAdmin para a porta 8081 do host
     depends_on:
       - postgres # Garante que o pgAdmin só seja iniciado após a inicialização do container do Postgres
     networks:
