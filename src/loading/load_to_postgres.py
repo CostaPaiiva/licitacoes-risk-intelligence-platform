@@ -12,6 +12,7 @@ from src.utils.database import get_engine
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Caminho da base processada que alimenta a carga.
 PROCESSED_DATA_PATH = os.path.join(
     BASE_DIR,
     "data",
@@ -34,6 +35,7 @@ def carregar_csv_processado() -> pd.DataFrame:
             "Execute primeiro o script src/transformation/transform_licitacoes.py"
         )
 
+    # Carrega o CSV já tratado para preparar a inserção no banco.
     df = pd.read_csv(PROCESSED_DATA_PATH)
 
     print("Arquivo processado carregado com sucesso.")
@@ -47,6 +49,7 @@ def limpar_tabelas(engine) -> None:
     Limpa as tabelas antes de uma nova carga.
     A ordem respeita as dependências da tabela fato com as dimensões.
     """
+    # Limpa primeiro a fato e depois as dimensões para evitar conflito de FK.
     with engine.begin() as conn:
         conn.execute(text("TRUNCATE TABLE fato_licitacoes RESTART IDENTITY CASCADE;"))
         conn.execute(text("TRUNCATE TABLE dim_tempo RESTART IDENTITY CASCADE;"))
@@ -62,6 +65,7 @@ def carregar_dim_orgao(df: pd.DataFrame, engine) -> pd.DataFrame:
     """
     Carrega a dimensão de órgãos públicos.
     """
+    # Deduplica os órgãos antes de gravar a dimensão.
     dim_orgao = (
         df[["orgao"]]
         .drop_duplicates()
@@ -73,6 +77,7 @@ def carregar_dim_orgao(df: pd.DataFrame, engine) -> pd.DataFrame:
         lambda x: "Municipal" if "Municipal" in x or "Prefeitura" in x or "Câmara" in x else "Estadual"
     )
 
+    # Classifica o órgão para facilitar análises por tipo institucional.
     dim_orgao["tipo_orgao"] = dim_orgao["orgao"].apply(classificar_tipo_orgao)
 
     dim_orgao = dim_orgao.rename(columns={"orgao": "nome_orgao"})
@@ -92,6 +97,7 @@ def classificar_tipo_orgao(nome_orgao: str) -> str:
     """
     nome = str(nome_orgao).lower()
 
+    # Regras simples de classificação por palavras-chave.
     if "prefeitura" in nome:
         return "Prefeitura"
     if "secretaria" in nome:
@@ -114,6 +120,7 @@ def carregar_dim_fornecedor(df: pd.DataFrame, engine) -> pd.DataFrame:
     """
     Carrega a dimensão de fornecedores.
     """
+    # Garante um cadastro único de fornecedor por nome/CNPJ/porte.
     dim_fornecedor = (
         df[["fornecedor", "cnpj_formatado", "porte_empresa"]]
         .drop_duplicates()
@@ -141,6 +148,7 @@ def carregar_dim_categoria(df: pd.DataFrame, engine) -> pd.DataFrame:
     """
     Carrega a dimensão de categorias de contratação.
     """
+    # Normaliza a combinação categoria + grupo_categoria.
     dim_categoria = (
         df[["categoria", "grupo_categoria"]]
         .drop_duplicates()
@@ -161,6 +169,7 @@ def carregar_dim_localidade(df: pd.DataFrame, engine) -> pd.DataFrame:
     """
     Carrega a dimensão de localidades.
     """
+    # Reduz a base para localidades únicas antes de persistir.
     dim_localidade = (
         df[["cidade", "estado", "regiao"]]
         .drop_duplicates()
@@ -181,6 +190,7 @@ def carregar_dim_tempo(df: pd.DataFrame, engine) -> pd.DataFrame:
     """
     Carrega a dimensão de tempo.
     """
+    # Usa a data de publicação como grão da dimensão temporal.
     dim_tempo = (
         df[["data_publicacao", "ano_publicacao", "mes_publicacao", "nome_mes", "trimestre"]]
         .drop_duplicates()
@@ -216,6 +226,7 @@ def montar_fato_licitacoes(
     """
     Monta a tabela fato com as chaves das dimensões.
     """
+    # Parte da base tratada e resolve as chaves surrogate de cada dimensão.
     fato = df.copy()
 
     fato = fato.merge(
@@ -272,6 +283,7 @@ def montar_fato_licitacoes(
         ]
     ].copy()
 
+    # Ajusta o nome do indicador para o formato esperado pela tabela fato.
     fato_final = fato_final.rename(
         columns={
             "possivel_outlier": "is_anomalia",
@@ -287,6 +299,7 @@ def carregar_fato_licitacoes(fato: pd.DataFrame, engine) -> None:
     """
     Carrega a tabela fato no PostgreSQL.
     """
+    # Insere a fato já pronta para consulta analítica.
     fato.to_sql("fato_licitacoes", engine, if_exists="append", index=False)
 
     print(f"fato_licitacoes carregada: {len(fato)} registros")
@@ -296,6 +309,7 @@ def validar_carga(engine) -> None:
     """
     Valida a quantidade de registros carregados em cada tabela.
     """
+    # Checagem simples para confirmar se cada tabela recebeu linhas.
     consultas = {
         "dim_orgao": "SELECT COUNT(*) AS total FROM dim_orgao;",
         "dim_fornecedor": "SELECT COUNT(*) AS total FROM dim_fornecedor;",
@@ -317,6 +331,7 @@ def executar_carga() -> None:
     """
     Executa o pipeline completo de carga no PostgreSQL.
     """
+    # Orquestra a conexão, a limpeza e a carga das dimensões e da fato.
     engine = get_engine()
 
     df = carregar_csv_processado()

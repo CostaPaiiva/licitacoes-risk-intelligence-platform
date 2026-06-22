@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: admin # Senha do administrador (recomenda-se alterar em produção)
       POSTGRES_DB: licitacoes_db # Nome do banco de dados inicial a ser criado
     ports:
-      - "5432:5432" # Mapeia a porta 5432 do container para a porta 5432 da máquina host
+      - "5433:5432" # Mapeia a porta 5432 do container para a porta 5432 da máquina host
     volumes:
       - ./docker/postgres_data:/var/lib/postgresql/data # Persistência dos dados do banco no host
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql # Script SQL para inicialização automática do banco
