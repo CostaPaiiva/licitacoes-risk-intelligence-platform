@@ -1,0 +1,37 @@
+# Configuração do Docker Compose para a plataforma de Inteligência de Risco em Licitações
+services:
+  # Serviço do Banco de Dados PostgreSQL para armazenamento de dados das licitações
+  postgres:
+    image: postgres:16 # Imagem oficial do PostgreSQL versão 16 (estável)
+    container_name: licitacoes_postgres # Nome do container para fácil identificação
+    environment:
+      POSTGRES_USER: admin # Usuário administrador do banco de dados
+      POSTGRES_PASSWORD: admin # Senha do administrador (recomenda-se alterar em produção)
+      POSTGRES_DB: licitacoes_db # Nome do banco de dados inicial a ser criado
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do container para a porta 5432 da máquina host
+    volumes:
+      - ./docker/postgres_data:/var/lib/postgresql/data # Persistência dos dados do banco no host
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql # Script SQL para inicialização automática do banco
+    networks:
+      - licitacoes_network # Conecta o serviço à rede interna do projeto
+    
+  # Serviço do pgAdmin para gerenciamento visual do PostgreSQL via interface web
+  pgadmin:
+    image: dpage/pgadmin4 # Imagem oficial do pgAdmin 4
+    container_name: licitacoes_pgadmin # Nome do container do pgAdmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # Email de login para acesso à interface web
+      PGADMIN_DEFAULT_PASSWORD: admin # Senha de login para acesso à interface web
+    ports:
+      - "8080:80" # Mapeia a porta 80 da interface do pgAdmin para a porta 8080 do host
+    depends_on:
+      - postgres # Garante que o pgAdmin só seja iniciado após a inicialização do container do Postgres
+    networks:
+      - licitacoes_network # Conecta o pgAdmin à mesma rede para permitir a comunicação com o banco de dados
+
+# Definição das redes para comunicação segura entre os containers
+networks:
+  licitacoes_network:
+    driver: bridge # Driver bridge para criar uma rede local isolada no host
+
