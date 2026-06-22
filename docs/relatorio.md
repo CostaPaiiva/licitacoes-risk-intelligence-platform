@@ -1,152 +1,160 @@
-# Relatório Técnico — Licitações Risk Intelligence Platform
+# Relatório Técnico - Licitações Risk Intelligence Platform
 
 ## 1. Introdução
 
-Este projeto tem como objetivo desenvolver uma plataforma de inteligência analítica aplicada ao contexto de licitações públicas. A proposta é construir uma solução completa de dados capaz de coletar, tratar, armazenar, analisar e visualizar informações relacionadas a contratos públicos, com foco na identificação de padrões de risco.
+Este documento registra o estado atual do projeto Licitações Risk Intelligence Platform. A solução foi pensada para apoiar análise de risco em licitações públicas por meio de uma pipeline de dados com etapas de extração, transformação, carga, consulta analítica e evolução para inteligência preditiva.
 
-O projeto foi desenvolvido com foco em Engenharia de Dados, Ciência de Dados e Análise de Dados, utilizando tecnologias como Python, Pandas, PostgreSQL, Docker, SQL, Scikit-learn e Streamlit.
+O projeto ainda está em andamento. Este relatório descreve o que já foi implementado até aqui e deixa explícito que a continuidade virá em novas etapas.
 
-## 2. Objetivo do Projeto
+## 2. Objetivo
 
-O principal objetivo do sistema é demonstrar como dados de licitações podem ser utilizados para apoiar processos de auditoria, controle interno, compliance e análise de gastos públicos.
+O objetivo principal é estruturar uma base analítica capaz de apoiar auditoria, compliance, controle interno e exploração de padrões relevantes em contratos públicos.
 
-A plataforma busca identificar:
+A plataforma busca responder perguntas como:
 
+- quais órgãos concentram maior volume financeiro;
+- quais fornecedores aparecem com mais frequência;
+- quais contratações ficam acima do valor estimado;
+- quais categorias concentram mais recursos;
+- quais registros apresentam maior risco;
+- onde há indícios de anomalia ou comportamento atípico.
+
+## 3. Escopo Implementado Até Agora
+
+Até este ponto, o projeto já possui:
+
+- geração e preparação de uma base bruta de licitações;
+- transformação dos dados com limpeza e enriquecimento;
+- carga para PostgreSQL com modelo dimensional;
+- scripts SQL para análises;
+- base de apoio para indicadores e modelos de machine learning;
+- documentação técnica em progresso.
+
+## 4. Arquitetura
+
+A arquitetura foi organizada em camadas:
+
+1. extração;
+2. transformação;
+3. carga;
+4. banco relacional;
+5. analytics;
+6. modelos de machine learning;
+7. dashboard.
+
+Essa estrutura permite evoluir o projeto sem acoplamento excessivo entre as etapas.
+
+## 5. Extração e Geração de Dados
+
+A base inicial do projeto é composta por dados simulados de licitações públicas, produzidos para permitir testes da pipeline e validação do fluxo analítico.
+
+Os registros contemplam informações como:
+
+- órgão;
+- fornecedor;
+- CNPJ;
+- categoria;
+- valores;
+- datas;
+- modalidade;
+- status;
+- score de risco;
+- nível de risco.
+
+## 6. Transformação dos Dados
+
+A etapa de transformação foi implementada em Python com foco em padronização, consistência e criação de colunas auxiliares.
+
+Os principais tratamentos realizados são:
+
+- normalização de campos textuais;
+- limpeza de CNPJ;
+- formatação de CNPJ para exibição;
+- conversão de datas;
+- criação de colunas temporais;
+- cálculo de dias entre publicação e homologação;
+- conversão de colunas numéricas;
+- remoção de registros inválidos;
+- recálculo da diferença entre valor estimado e contratado;
+- criação de faixas de valor;
+- criação de faixas de variação percentual;
+- criação de indicadores booleanos de risco.
+
+## 7. Carga no PostgreSQL
+
+A carga está estruturada em modelo dimensional, com tabelas de dimensão e tabela fato.
+
+Dimensões previstas/implementadas no pipeline:
+
+- dimensão de órgão;
+- dimensão de fornecedor;
+- dimensão de categoria;
+- dimensão de localidade;
+- dimensão de tempo.
+
+A tabela fato consolida os registros de licitações com as chaves das dimensões e os principais atributos analíticos.
+
+## 8. Banco de Dados
+
+A conexão com o banco está centralizada em `src/utils/database.py`, permitindo o uso de:
+
+- `DATABASE_URL` como conexão única;
+- ou variáveis separadas `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT` e `POSTGRES_DB`.
+
+A base foi pensada para rodar com PostgreSQL via Docker, o que facilita reprodução local do ambiente.
+
+## 9. Estrutura Analítica
+
+Foram adicionados scripts SQL para consultas que apoiam a análise do projeto, incluindo:
+
+- total por órgão;
 - fornecedores recorrentes;
-- valores contratados acima da média;
-- concentração de contratos por órgão;
-- categorias com maior volume financeiro;
-- evolução mensal das contratações;
-- contratos com maior score de risco;
-- possíveis anomalias nos dados.
+- compras por categoria;
+- evolução mensal;
+- contratos acima da média;
+- indicadores de risco.
 
-## 3. Arquitetura Inicial
+## 10. Base para Continuidade
 
-A arquitetura do projeto foi organizada em camadas:
+O projeto já deixou pronta a fundação para continuar com as próximas entregas:
 
-- extração de dados;
-- transformação e tratamento;
-- carga em banco PostgreSQL;
-- consultas analíticas SQL;
-- modelos de ciência de dados;
-- dashboard interativo.
+### 10.1 Consolidação dos dados
 
-A estrutura foi planejada para simular um fluxo real de dados, desde a origem até a camada de visualização.
+- validar cargas;
+- revisar integridade das chaves;
+- estabilizar a modelagem final;
+- revisar nomes de colunas e regras de negócio.
 
-## 4. Geração da Base de Dados
+### 10.2 Camada de analytics
 
-Nesta etapa, foi criada uma base simulada de licitações públicas utilizando Python, Pandas e Faker.
+- aprofundar os KPIs;
+- revisar métricas de volume, concentração e risco;
+- consolidar queries para apoio ao dashboard.
 
-A base gerada contém registros com aparência realista, incluindo órgãos públicos, fornecedores, CNPJs, categorias de contratação, valores, datas, modalidades e status das licitações.
+### 10.3 Machine Learning
 
-## 5. Campos Gerados
+- ajustar modelos de classificação de risco;
+- evoluir a detecção de anomalias;
+- testar agrupamento de fornecedores;
+- revisar features e métricas de avaliação.
 
-A base contém os seguintes campos principais:
+### 10.4 Dashboard
 
-| Campo | Descrição |
-|---|---|
-| id_licitacao | Identificador único da licitação |
-| numero_processo | Número fictício do processo |
-| orgao | Nome do órgão público |
-| cidade | Cidade vinculada à licitação |
-| estado | Unidade federativa |
-| regiao | Região do Brasil |
-| categoria | Categoria da contratação |
-| grupo_categoria | Grupo geral da categoria |
-| descricao | Descrição da contratação |
-| fornecedor | Empresa vencedora ou participante |
-| cnpj_fornecedor | CNPJ fictício do fornecedor |
-| porte_empresa | Porte da empresa |
-| valor_estimado | Valor estimado da contratação |
-| valor_contratado | Valor contratado |
-| diferenca_valor | Diferença entre valor contratado e estimado |
-| percentual_diferenca | Diferença percentual entre valores |
-| data_publicacao | Data de publicação da licitação |
-| data_homologacao | Data de homologação |
-| ano | Ano da publicação |
-| mes | Mês da publicação |
-| trimestre | Trimestre da publicação |
-| modalidade | Modalidade da licitação |
-| status | Status da licitação |
-| fornecedor_recorrente | Indica se o fornecedor aparece de forma recorrente |
-| possivel_outlier | Indica se o registro foi gerado como possível anomalia |
-| score_risco | Pontuação inicial de risco |
-| nivel_risco | Classificação do risco |
+- integrar as consultas ao painel;
+- revisar UX e organização visual;
+- priorizar os indicadores principais do projeto.
 
-## 6. Regras Iniciais de Risco
+## 11. Resultado Parcial
 
-A pontuação inicial de risco foi construída com base em regras simples e interpretáveis.
+Até aqui, o projeto já cobre a cadeia principal de engenharia de dados:
 
-Foram considerados fatores como:
+- entrada dos dados;
+- tratamento e enriquecimento;
+- persistência em banco;
+- preparação para análise.
 
-- percentual de diferença entre valor estimado e valor contratado;
-- fornecedor recorrente;
-- modalidade de contratação;
-- status da licitação;
-- presença de outlier intencional.
+O trabalho ainda não está concluído. A próxima fase deve focar na consolidação analítica, no refinamento dos modelos e na construção da interface final.
 
-A partir da pontuação final, cada licitação foi classificada em um dos seguintes níveis:
+## 12. Conclusão Parcial
 
-- Baixo;
-- Médio;
-- Alto;
-- Crítico.
-
-## 7. Resultado da Etapa
-
-Ao final desta etapa, foram gerados dois arquivos:
-
-```txt
-data/raw/licitacoes_raw.csv
-data/sample/licitacoes_sample.csv
-## 9. Transformação e Tratamento dos Dados
-
-Após a geração da base bruta, foi criada uma etapa de transformação utilizando Python e Pandas. Essa etapa tem como objetivo preparar os dados para uso analítico e posterior carga no banco PostgreSQL.
-
-Durante o processo de transformação, foram aplicadas regras de limpeza, padronização e enriquecimento dos dados.
-
-## 10. Tratamentos Realizados
-
-Os principais tratamentos aplicados foram:
-
-| Tratamento | Descrição |
-|---|---|
-| Padronização textual | Remoção de espaços extras e normalização dos campos textuais |
-| Limpeza de CNPJ | Remoção de caracteres especiais, mantendo apenas números |
-| Formatação de CNPJ | Criação de campo formatado para visualização |
-| Conversão de datas | Conversão das datas para formato adequado |
-| Enriquecimento temporal | Criação de ano, mês, dia, trimestre, nome do mês e ano/mês |
-| Cálculo de prazo | Cálculo dos dias entre publicação e homologação |
-| Validação numérica | Conversão e validação dos valores financeiros |
-| Recalculo de diferença | Recalculo da diferença entre valor contratado e estimado |
-| Faixa de valor | Classificação dos contratos por faixa financeira |
-| Faixa de variação | Classificação da diferença percentual entre valores |
-| Indicadores de risco | Criação de flags para facilitar análises futuras |
-
-## 11. Novas Colunas Criadas
-
-A etapa de transformação adicionou colunas analíticas importantes para o projeto:
-
-| Nova coluna | Descrição |
-|---|---|
-| cnpj_limpo | CNPJ contendo apenas números |
-| cnpj_formatado | CNPJ formatado para visualização |
-| ano_publicacao | Ano extraído da data de publicação |
-| mes_publicacao | Mês extraído da data de publicação |
-| dia_publicacao | Dia extraído da data de publicação |
-| nome_mes | Nome do mês da publicação |
-| ano_mes | Ano e mês no formato YYYY-MM |
-| dias_ate_homologacao | Quantidade de dias entre publicação e homologação |
-| faixa_valor | Classificação do contrato por valor contratado |
-| faixa_variacao | Classificação da variação entre valor contratado e estimado |
-| valor_milhoes | Valor contratado convertido para milhões |
-| is_valor_acima_estimado | Indica se o valor contratado ficou acima do estimado |
-| is_risco_alto_ou_critico | Indica se a licitação possui risco alto ou crítico |
-| is_dispensa_ou_inexigibilidade | Indica modalidades com maior atenção analítica |
-
-## 12. Resultado da Etapa
-
-Ao final da transformação, foi gerado o arquivo processado:
-
-```txt
-data/processed/licitacoes_processed.csv
+Este relatório representa o estágio atual do projeto e serve como base para a continuação do desenvolvimento. A solução já possui a espinha dorsal da pipeline, mas ainda depende de etapas de refinamento, validação e visualização para atingir a versão final.
