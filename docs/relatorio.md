@@ -99,3 +99,54 @@ Ao final desta etapa, foram gerados dois arquivos:
 ```txt
 data/raw/licitacoes_raw.csv
 data/sample/licitacoes_sample.csv
+## 9. Transformação e Tratamento dos Dados
+
+Após a geração da base bruta, foi criada uma etapa de transformação utilizando Python e Pandas. Essa etapa tem como objetivo preparar os dados para uso analítico e posterior carga no banco PostgreSQL.
+
+Durante o processo de transformação, foram aplicadas regras de limpeza, padronização e enriquecimento dos dados.
+
+## 10. Tratamentos Realizados
+
+Os principais tratamentos aplicados foram:
+
+| Tratamento | Descrição |
+|---|---|
+| Padronização textual | Remoção de espaços extras e normalização dos campos textuais |
+| Limpeza de CNPJ | Remoção de caracteres especiais, mantendo apenas números |
+| Formatação de CNPJ | Criação de campo formatado para visualização |
+| Conversão de datas | Conversão das datas para formato adequado |
+| Enriquecimento temporal | Criação de ano, mês, dia, trimestre, nome do mês e ano/mês |
+| Cálculo de prazo | Cálculo dos dias entre publicação e homologação |
+| Validação numérica | Conversão e validação dos valores financeiros |
+| Recalculo de diferença | Recalculo da diferença entre valor contratado e estimado |
+| Faixa de valor | Classificação dos contratos por faixa financeira |
+| Faixa de variação | Classificação da diferença percentual entre valores |
+| Indicadores de risco | Criação de flags para facilitar análises futuras |
+
+## 11. Novas Colunas Criadas
+
+A etapa de transformação adicionou colunas analíticas importantes para o projeto:
+
+| Nova coluna | Descrição |
+|---|---|
+| cnpj_limpo | CNPJ contendo apenas números |
+| cnpj_formatado | CNPJ formatado para visualização |
+| ano_publicacao | Ano extraído da data de publicação |
+| mes_publicacao | Mês extraído da data de publicação |
+| dia_publicacao | Dia extraído da data de publicação |
+| nome_mes | Nome do mês da publicação |
+| ano_mes | Ano e mês no formato YYYY-MM |
+| dias_ate_homologacao | Quantidade de dias entre publicação e homologação |
+| faixa_valor | Classificação do contrato por valor contratado |
+| faixa_variacao | Classificação da variação entre valor contratado e estimado |
+| valor_milhoes | Valor contratado convertido para milhões |
+| is_valor_acima_estimado | Indica se o valor contratado ficou acima do estimado |
+| is_risco_alto_ou_critico | Indica se a licitação possui risco alto ou crítico |
+| is_dispensa_ou_inexigibilidade | Indica modalidades com maior atenção analítica |
+
+## 12. Resultado da Etapa
+
+Ao final da transformação, foi gerado o arquivo processado:
+
+```txt
+data/processed/licitacoes_processed.csv

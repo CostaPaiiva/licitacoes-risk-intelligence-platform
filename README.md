@@ -1,22 +1,43 @@
-## Base de dados simulada
+## Pipeline de transformação
 
-A primeira etapa do projeto utiliza uma base simulada de licitações públicas com características realistas. Essa decisão permite desenvolver e testar todo o pipeline de dados, as consultas analíticas, os modelos de detecção de risco e o dashboard sem depender inicialmente de APIs externas.
+A etapa de transformação é responsável por limpar, padronizar e enriquecer a base bruta de licitações.
 
-A base contém informações como:
+Principais tratamentos realizados:
 
-- órgão público;
-- fornecedor;
-- CNPJ;
-- cidade;
-- estado;
-- categoria da contratação;
-- valor estimado;
-- valor contratado;
-- data de publicação;
-- data de homologação;
-- modalidade;
-- status;
-- score de risco;
-- nível de risco.
+- padronização de campos textuais;
+- limpeza e formatação de CNPJ;
+- conversão e tratamento de datas;
+- criação de colunas de ano, mês, trimestre e ano/mês;
+- cálculo de dias até homologação;
+- validação de valores estimados e contratados;
+- recálculo da diferença entre valor estimado e contratado;
+- criação de faixas de valor contratado;
+- criação de faixas de variação percentual;
+- criação de indicadores booleanos de risco.
 
-Além disso, a base foi construída com padrões intencionais para análise, incluindo fornecedores recorrentes, valores acima da média e possíveis outliers.
+Ao final da etapa, é gerado o arquivo:
+
+```txt
+data/processed/licitacoes_processed.csv
+
+## Pipeline de transformação
+
+A etapa de transformação é responsável por limpar, padronizar e enriquecer a base bruta de licitações.
+
+Principais tratamentos realizados:
+
+- padronização de campos textuais;
+- limpeza e formatação de CNPJ;
+- conversão e tratamento de datas;
+- criação de colunas de ano, mês, trimestre e ano/mês;
+- cálculo de dias até homologação;
+- validação de valores estimados e contratados;
+- recálculo da diferença entre valor estimado e contratado;
+- criação de faixas de valor contratado;
+- criação de faixas de variação percentual;
+- criação de indicadores booleanos de risco.
+
+Ao final da etapa, é gerado o arquivo:
+
+```txt
+data/processed/licitacoes_processed.csv
