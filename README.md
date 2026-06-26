@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Plataforma end-to-end para analise de risco em licitacoes publicas, desenhada para demonstrar engenharia de dados, analytics engineering, machine learning aplicado e entrega de produto em dashboard.
+  End-to-end risk intelligence platform for public procurement, designed to demonstrate data engineering, analytics engineering, applied machine learning and product delivery through an interactive dashboard.
 </p>
 
 ## Why this project stands out
@@ -24,15 +24,15 @@
   <tr>
     <td>
       <strong>End-to-end delivery</strong><br/>
-      Da geracao da base ao dashboard final, com pipeline executavel localmente.
+      From raw data generation to the final dashboard, with a fully reproducible local pipeline.
     </td>
     <td>
       <strong>Business-oriented</strong><br/>
-      Foco em auditoria, compliance e priorizacao de investigacoes.
+      Built around audit, compliance and investigation prioritization use cases.
     </td>
     <td>
-      <strong>Interpretabilidade</strong><br/>
-      Regras de negocio + ML + motivos de risco para apoiar decisao.
+      <strong>Interpretability</strong><br/>
+      Business rules + ML + explainable risk drivers to support decisions.
     </td>
   </tr>
 </table>
@@ -117,6 +117,38 @@ This platform helps teams working with public procurement identify:
     <td align="center"><strong>1</strong><br/>analytical dashboard</td>
   </tr>
 </table>
+
+## Product preview
+
+The dashboard is organized into four investigation flows: executive overview, anomaly detection, final risk classification and supplier segmentation.
+
+### Executive overview
+
+<p align="center">
+  <img src="docs/images/screenshots/overview-1.png" alt="Dashboard overview with KPIs and top rankings" width="48%" />
+  <img src="docs/images/screenshots/overview-2.png" alt="Dashboard overview with category distribution, risk distribution and monthly evolution" width="48%" />
+</p>
+
+### Anomaly detection
+
+<p align="center">
+  <img src="docs/images/screenshots/anomalies-1.png" alt="Anomaly detection page with anomaly KPIs and category distribution" width="48%" />
+  <img src="docs/images/screenshots/anomalies-2.png" alt="Anomaly table with filters and top anomalous procurement records" width="48%" />
+</p>
+
+### Final risk classification
+
+<p align="center">
+  <img src="docs/images/screenshots/risk-1.png" alt="Final risk classification charts and audit priority distribution" width="48%" />
+  <img src="docs/images/screenshots/risk-2.png" alt="Highest audit priority procurement table" width="48%" />
+</p>
+
+### Supplier clustering
+
+<p align="center">
+  <img src="docs/images/screenshots/suppliers-1.png" alt="Supplier clustering overview with profile distribution" width="48%" />
+  <img src="docs/images/screenshots/suppliers-2.png" alt="Clustered supplier base table with profile filters" width="48%" />
+</p>
 
 ## Repository structure
 
@@ -219,4 +251,4 @@ Open `http://localhost:8501` in your browser.
 
 ## Portfolio note
 
-This repository is designed to show how a data project can be turned into a product narrative: a real business problem, a structured data stack, explainable risk logic and a final interface that a recruiter or hiring manager can review quickly.
+This repository is designed to show how a data project can be turned into a product narrative: a real business problem, a structured data stack, explainable risk logic and a final interface.
