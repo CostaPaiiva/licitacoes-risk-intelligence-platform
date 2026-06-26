@@ -224,3 +224,41 @@ As principais visualizações desenvolvidas foram:
 Com o dashboard, o projeto passa a ter uma camada visual interativa, permitindo que os dados processados e armazenados no PostgreSQL sejam explorados de maneira simples e profissional.
 
 Essa etapa transforma o projeto em uma solução analítica completa, integrando pipeline de dados, banco relacional, SQL analítico e visualização.
+
+## 25. Detecção de Anomalias com Machine Learning
+
+Após a criação do pipeline de dados, da modelagem dimensional, das consultas SQL e do dashboard, foi adicionada uma etapa de Ciência de Dados voltada para detecção de anomalias.
+
+O objetivo dessa etapa é identificar licitações com comportamento atípico em relação ao conjunto de dados analisado.
+
+## 26. Algoritmo Utilizado
+
+Foi utilizado o algoritmo Isolation Forest, técnica de aprendizado não supervisionado voltada para identificação de observações incomuns em bases de dados.
+
+No contexto do projeto, o modelo foi aplicado para detectar licitações que apresentam padrões financeiros ou comportamentais fora do esperado.
+
+## 27. Variáveis Utilizadas
+
+As principais variáveis utilizadas pelo modelo foram:
+
+| Variável | Descrição |
+|---|---|
+| valor_estimado | Valor previsto inicialmente para a licitação |
+| valor_contratado | Valor efetivamente contratado |
+| diferenca_valor | Diferença entre valor contratado e estimado |
+| percentual_diferenca | Diferença percentual entre os valores |
+| score_risco | Pontuação inicial de risco |
+| frequencia_fornecedor | Quantidade de contratos associados ao fornecedor |
+| frequencia_orgao | Quantidade de contratos associados ao órgão |
+| media_valor_categoria | Média de valor contratado da categoria |
+| percentual_acima_media_categoria | Percentual acima ou abaixo da média da categoria |
+
+## 28. Resultado da Etapa
+
+O modelo gerou novas colunas analíticas indicando se a licitação foi classificada como anomalia e qual o nível de alerta associado.
+
+O resultado foi salvo no arquivo:
+
+`data/processed/licitacoes_anomaly_detection.csv`
+
+Essa etapa fortalece o projeto ao adicionar uma camada de Ciência de Dados aplicada à análise de risco em licitações públicas.

@@ -167,3 +167,26 @@ O dashboard consome os dados diretamente do PostgreSQL a partir da view analíti
 
 ```bash
 streamlit run dashboard/app.py
+
+
+## Detecção de anomalias com Machine Learning
+
+O projeto utiliza o algoritmo Isolation Forest para identificar licitações com comportamento atípico.
+
+Foram consideradas variáveis como:
+
+- valor estimado;
+- valor contratado;
+- diferença entre valor estimado e contratado;
+- percentual de diferença;
+- score de risco;
+- frequência do fornecedor;
+- frequência do órgão;
+- média de valor por categoria;
+- percentual acima da média da categoria.
+
+O resultado da análise é salvo em:
+
+`data/processed/licitacoes_anomaly_detection.csv`
+
+Essa etapa permite identificar possíveis contratos fora do padrão, apoiando análises de auditoria, compliance e controle interno.
