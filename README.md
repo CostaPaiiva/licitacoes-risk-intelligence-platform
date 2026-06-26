@@ -142,3 +142,28 @@ Também foi criada uma view analítica chamada:
 `vw_licitacoes_analytics`
 
 Essa view consolida a tabela fato com as dimensões, facilitando o consumo dos dados pelo dashboard e por ferramentas analíticas.
+
+## Dashboard em Streamlit
+
+O projeto possui um dashboard interativo desenvolvido em Streamlit para visualização dos principais indicadores de licitações públicas.
+
+O dashboard consome os dados diretamente do PostgreSQL a partir da view analítica `vw_licitacoes_analytics`.
+
+### Funcionalidades do dashboard
+
+- filtros por ano, órgão, categoria e nível de risco;
+- indicadores gerais de licitações;
+- valor total contratado;
+- quantidade de órgãos e fornecedores;
+- percentual de contratos de alto risco ou críticos;
+- ranking de órgãos por valor contratado;
+- fornecedores mais recorrentes;
+- distribuição por categoria;
+- evolução mensal dos contratos;
+- ranking das licitações com maior score de risco;
+- análise consolidada por fornecedor.
+
+### Executar dashboard
+
+```bash
+streamlit run dashboard/app.py

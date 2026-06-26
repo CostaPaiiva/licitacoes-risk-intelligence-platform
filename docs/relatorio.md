@@ -187,3 +187,40 @@ Essa view facilita o consumo dos dados em ferramentas de BI, dashboards e script
 Ao final desta etapa, o projeto passou a contar com uma camada SQL estruturada, permitindo análises de auditoria, compliance e inteligência em compras públicas.
 
 Essa etapa reforça a proposta do projeto como uma solução completa de dados, integrando modelagem dimensional, banco relacional e consultas analíticas.
+
+## 21. Dashboard Analítico
+
+Após a criação da camada analítica SQL, foi desenvolvido um dashboard interativo utilizando Streamlit e Plotly.
+
+O objetivo do dashboard é permitir a análise visual dos principais indicadores relacionados às licitações públicas, facilitando a identificação de padrões financeiros, fornecedores recorrentes, concentração de contratos e níveis de risco.
+
+## 22. Indicadores do Dashboard
+
+O dashboard apresenta os seguintes indicadores:
+
+| Indicador | Descrição |
+|---|---|
+| Total de licitações | Quantidade total de registros analisados |
+| Valor total contratado | Soma dos valores contratados |
+| Valor médio contratado | Média dos valores contratados |
+| Total de fornecedores | Quantidade de fornecedores distintos |
+| Total de órgãos | Quantidade de órgãos públicos distintos |
+| Risco alto/crítico | Percentual de licitações classificadas como alto ou crítico risco |
+
+## 23. Visualizações Criadas
+
+As principais visualizações desenvolvidas foram:
+
+- top 10 órgãos por valor contratado;
+- top 10 fornecedores recorrentes;
+- distribuição de valores por categoria;
+- distribuição por nível de risco;
+- evolução mensal dos contratos;
+- ranking das licitações com maior score de risco;
+- análise consolidada por fornecedor.
+
+## 24. Resultado da Etapa
+
+Com o dashboard, o projeto passa a ter uma camada visual interativa, permitindo que os dados processados e armazenados no PostgreSQL sejam explorados de maneira simples e profissional.
+
+Essa etapa transforma o projeto em uma solução analítica completa, integrando pipeline de dados, banco relacional, SQL analítico e visualização.
