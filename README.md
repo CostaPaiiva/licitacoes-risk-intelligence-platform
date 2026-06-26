@@ -190,3 +190,28 @@ O resultado da análise é salvo em:
 `data/processed/licitacoes_anomaly_detection.csv`
 
 Essa etapa permite identificar possíveis contratos fora do padrão, apoiando análises de auditoria, compliance e controle interno.
+
+## Classificação de risco
+
+Além da detecção de anomalias, o projeto possui uma etapa de classificação de risco das licitações.
+
+A classificação combina regras de negócio com o resultado do modelo de anomalias, considerando fatores como:
+
+- score de risco inicial;
+- anomalia detectada pelo modelo;
+- diferença percentual entre valor estimado e contratado;
+- valor contratado;
+- frequência do fornecedor;
+- modalidade da licitação;
+- status da licitação.
+
+O resultado gera novas colunas analíticas, como:
+
+- `ml_score_risco_final`;
+- `ml_nivel_risco_final`;
+- `prioridade_auditoria`;
+- `motivos_risco`.
+
+O arquivo final é salvo em:
+
+`data/processed/licitacoes_risk_classification.csv`

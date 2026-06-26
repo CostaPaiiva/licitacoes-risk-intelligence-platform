@@ -262,3 +262,42 @@ O resultado foi salvo no arquivo:
 `data/processed/licitacoes_anomaly_detection.csv`
 
 Essa etapa fortalece o projeto ao adicionar uma camada de Ciência de Dados aplicada à análise de risco em licitações públicas.
+
+## 29. Classificação Final de Risco
+
+Após a detecção de anomalias, foi criada uma etapa de classificação final de risco. Essa etapa combina o score inicial da base, o resultado do modelo de anomalias e regras adicionais de negócio.
+
+O objetivo é transformar os indicadores técnicos em uma classificação mais interpretável para auditoria, compliance e tomada de decisão.
+
+## 30. Critérios Utilizados
+
+A classificação final considera:
+
+| Critério | Justificativa |
+|---|---|
+| Score de risco inicial | Representa a primeira avaliação baseada em regras |
+| Anomalia detectada pelo modelo | Indica comportamento estatisticamente atípico |
+| Diferença percentual | Mede quanto o valor contratado se distancia do estimado |
+| Valor contratado | Contratos de maior valor exigem maior atenção |
+| Frequência do fornecedor | Fornecedores recorrentes podem indicar concentração |
+| Modalidade | Dispensa e inexigibilidade exigem maior atenção analítica |
+| Status | Licitações canceladas, suspensas ou revogadas podem indicar sensibilidade |
+
+## 31. Saídas Geradas
+
+A etapa gera as seguintes colunas:
+
+| Coluna | Descrição |
+|---|---|
+| ml_score_risco_final | Pontuação final de risco |
+| ml_nivel_risco_final | Classificação final em Baixo, Médio, Alto ou Crítico |
+| prioridade_auditoria | Nível de prioridade para análise |
+| motivos_risco | Explicação textual dos principais fatores de risco |
+
+## 32. Resultado da Etapa
+
+O resultado da classificação final de risco foi salvo no arquivo:
+
+`data/processed/licitacoes_risk_classification.csv`
+
+Essa etapa torna o projeto mais interpretável, pois não apenas identifica riscos, mas também explica os principais motivos associados a cada licitação.
