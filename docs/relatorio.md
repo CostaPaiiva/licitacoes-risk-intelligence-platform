@@ -301,3 +301,71 @@ O resultado da classificação final de risco foi salvo no arquivo:
 `data/processed/licitacoes_risk_classification.csv`
 
 Essa etapa torna o projeto mais interpretável, pois não apenas identifica riscos, mas também explica os principais motivos associados a cada licitação.
+
+## 33. Clusterização de Fornecedores
+
+Além da detecção de anomalias e da classificação de risco, foi criada uma etapa de clusterização de fornecedores utilizando KMeans.
+
+O objetivo dessa etapa é identificar grupos de fornecedores com comportamentos semelhantes, permitindo análises sobre recorrência, concentração, valor financeiro e exposição a riscos.
+
+## 34. Variáveis Utilizadas na Clusterização
+
+A clusterização foi construída a partir de uma base agregada por fornecedor.
+
+As principais variáveis utilizadas foram:
+
+| Variável | Descrição |
+|---|---|
+| total_contratos | Quantidade de contratos associados ao fornecedor |
+| total_orgaos | Quantidade de órgãos públicos atendidos |
+| total_categorias | Quantidade de categorias atendidas |
+| valor_total_contratado | Soma total dos contratos do fornecedor |
+| valor_medio_contrato | Valor médio dos contratos |
+| maior_contrato | Maior contrato identificado |
+| score_medio_original | Média do score inicial de risco |
+| score_medio_final | Média do score final de risco |
+| total_anomalias | Quantidade de contratos classificados como anomalia |
+| contratos_alto_critico | Quantidade de contratos com risco alto ou crítico |
+| contratos_criticos | Quantidade de contratos críticos |
+| percentual_anomalias | Percentual de contratos classificados como anomalia |
+| percentual_alto_critico | Percentual de contratos com risco alto ou crítico |
+
+## 35. Perfis Gerados
+
+Os fornecedores foram agrupados em perfis interpretáveis:
+
+| Perfil | Interpretação |
+|---|---|
+| Fornecedor recorrente | Fornecedor com presença frequente na base |
+| Fornecedor de alto valor | Fornecedor associado a contratos de maior valor financeiro |
+| Fornecedor de baixo risco | Fornecedor com comportamento mais estável |
+| Fornecedor com atenção especial | Fornecedor com maior presença de anomalias, contratos críticos ou indicadores de risco |
+
+## 36. Resultado da Etapa
+
+O resultado da clusterização foi salvo em:
+
+`data/processed/fornecedores_clusterizados.csv`
+
+Essa etapa fortalece a análise de fornecedores, permitindo identificar padrões de concentração, recorrência e exposição a risco em compras públicas.
+
+## 37. Integração dos Modelos ao Dashboard
+
+Após a criação dos modelos de detecção de anomalias, classificação de risco e clusterização de fornecedores, os resultados foram integrados ao dashboard em Streamlit.
+
+A interface foi organizada em abas para facilitar a navegação entre os diferentes tipos de análise.
+
+## 38. Abas do Dashboard
+
+| Aba | Objetivo |
+|---|---|
+| Visão Geral | Apresenta os principais indicadores das licitações |
+| Anomalias | Mostra os registros classificados como anômalos pelo modelo |
+| Classificação de Risco | Apresenta o risco final, prioridade de auditoria e motivos de risco |
+| Fornecedores | Exibe os perfis criados pela clusterização de fornecedores |
+
+## 39. Resultado da Integração
+
+Com essa integração, o projeto passa a funcionar como uma plataforma analítica completa, reunindo engenharia de dados, banco relacional, SQL analítico, machine learning e dashboard interativo.
+
+Essa etapa fortalece a apresentação do projeto como uma solução aplicada a auditoria, compliance e inteligência em compras públicas.

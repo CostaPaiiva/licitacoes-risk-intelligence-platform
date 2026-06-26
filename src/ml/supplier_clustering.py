@@ -261,23 +261,82 @@ def reinterpretar_clusters(df_cluster: pd.DataFrame) -> pd.DataFrame: # Define a
         elif cluster == cluster_alto_valor:
             mapa[cluster] = "Fornecedor de alto valor"
         elif cluster == cluster_recorrente:
-            mapa[cluster] = "Fornecedor recorrente"
-        else:
-            mapa[cluster] = "Fornecedor de baixo risco" # O que sobrar é considerado de baixo risco.
+            mapa[cluster] 
+            
+def reinterpretar_clusters(df_cluster: pd.DataFrame) -> pd.DataFrame:
+    """
+    Reinterpreta os clusters com base nas médias reais de cada grupo.
+    Garante perfis mais bem distribuídos e interpretáveis.
+    """
+    resumo = (
+        df_cluster.groupby("cluster_fornecedor")
+        .agg(
+            total_fornecedores=("nome_fornecedor", "count"),
+            media_contratos=("total_contratos", "mean"),
+            media_valor_total=("valor_total_contratado", "mean"),
+            media_score_final=("score_medio_final", "mean"),
+            media_anomalias=("total_anomalias", "mean"),
+            media_alto_critico=("contratos_alto_critico", "mean"),
+            media_percentual_alto_critico=("percentual_alto_critico", "mean"),
+        )
+        .reset_index()
+    )
 
-    # Aplica o mapeamento para atualizar os nomes dos perfis no DataFrame principal.
+    resumo["ranking_risco"] = (
+        resumo["media_score_final"]
+        + resumo["media_anomalias"] * 5
+        + resumo["media_alto_critico"] * 3
+        + resumo["media_percentual_alto_critico"]
+    )
+
+    clusters_disponiveis = set(resumo["cluster_fornecedor"].tolist())
+    mapa = {}
+
+    # 1. Cluster com maior risco
+    cluster_atencao = resumo.sort_values("ranking_risco", ascending=False).iloc[0][
+        "cluster_fornecedor"
+    ]
+    mapa[cluster_atencao] = "Fornecedor com atenção especial"
+    clusters_disponiveis.remove(cluster_atencao)
+
+    # 2. Cluster com maior valor total médio
+    if clusters_disponiveis:
+        cluster_alto_valor = (
+            resumo[resumo["cluster_fornecedor"].isin(clusters_disponiveis)]
+            .sort_values("media_valor_total", ascending=False)
+            .iloc[0]["cluster_fornecedor"]
+        )
+        mapa[cluster_alto_valor] = "Fornecedor de alto valor"
+        clusters_disponiveis.remove(cluster_alto_valor)
+
+    # 3. Cluster com maior recorrência média
+    if clusters_disponiveis:
+        cluster_recorrente = (
+            resumo[resumo["cluster_fornecedor"].isin(clusters_disponiveis)]
+            .sort_values("media_contratos", ascending=False)
+            .iloc[0]["cluster_fornecedor"]
+        )
+        mapa[cluster_recorrente] = "Fornecedor recorrente"
+        clusters_disponiveis.remove(cluster_recorrente)
+
+    # 4. Restante como baixo risco
+    for cluster in clusters_disponiveis:
+        mapa[cluster] = "Fornecedor de baixo risco"
+
     df_cluster["perfil_cluster"] = df_cluster["cluster_fornecedor"].map(mapa)
-    # Atualiza as descrições com base nos novos perfis.
     df_cluster["descricao_cluster"] = df_cluster["perfil_cluster"].apply(descrever_cluster)
 
-    print("\nResumo dos clusters:") # Exibe o resumo das médias de cada cluster.
+    print("\nResumo dos clusters:")
     print(resumo)
 
-    print("\nPerfis reinterpretados:") # Exibe a nova contagem de fornecedores por perfil.
+    print("\nMapeamento final dos clusters:")
+    for cluster, perfil in mapa.items():
+        print(f"Cluster {cluster}: {perfil}")
+
+    print("\nPerfis reinterpretados:")
     print(df_cluster["perfil_cluster"].value_counts())
 
-    return df_cluster # Retorna o DataFrame com os clusters nomeados corretamente.
-
+    return df_cluster
 
 # ============================================================
 # Salvamento

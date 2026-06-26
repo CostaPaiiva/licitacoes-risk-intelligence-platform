@@ -1,217 +1,140 @@
 # Licitações Risk Intelligence Platform
 
-Plataforma para análise de risco em licitações públicas, com foco em extração, transformação, carga em PostgreSQL, consultas analíticas e evolução futura para camadas de analytics, machine learning e dashboard.
+Uma plataforma de ponta a ponta para análise de risco em licitações públicas, demonstrando um fluxo completo de **Engenharia de Dados**, **Análise de Dados** e **Ciência de Dados**. A solução transforma dados brutos em insights acionáveis, apresentados em um dashboard interativo.
 
-## Status Atual
+## 🎯 Objetivo
 
-O projeto está em desenvolvimento. Até este ponto, a base principal já cobre:
+O projeto foi desenvolvido para estruturar uma base analítica robusta que apoie atividades de auditoria, compliance e controle interno em contratos públicos. A plataforma busca responder a perguntas críticas de negócio, como:
 
-- geração e extração de dados de amostra;
-- transformação e enriquecimento da base bruta;
-- carga estruturada no PostgreSQL;
-- scripts SQL para análises exploratórias;
-- base inicial para indicadores, modelos de ML e dashboard.
+- Quais órgãos concentram os maiores volumes financeiros?
+- Quais fornecedores possuem contratos recorrentes?
+- Onde há indícios de sobrepreço ou comportamento atípico?
+- Quais são as licitações com maior prioridade para auditoria?
 
-O trabalho ainda não foi finalizado. Este repositório deve seguir como uma versão em andamento, com espaço para novas regras, validações, modelos e visualizações.
+## ✨ Principais Funcionalidades
 
-## Visão Geral
+- **Pipeline de Dados Completo**: Extração, transformação e carga (ETL) de dados simulados de licitações.
+- **Modelagem Dimensional**: Os dados são estruturados em um modelo dimensional (Star Schema) em um banco de dados PostgreSQL, otimizado para consultas analíticas.
+- **Análise de Risco com Machine Learning**:
+  - **Detecção de Anomalias**: Utiliza o algoritmo `Isolation Forest` para identificar licitações com comportamento atípico.
+  - **Classificação de Risco**: Combina regras de negócio e o resultado do modelo de anomalias para gerar um score de risco final e uma prioridade de auditoria.
+  - **Clusterização de Fornecedores**: Agrupa fornecedores em perfis comportamentais (`KMeans`) como "Alto Valor", "Recorrente" ou "Atenção Especial".
+- **Dashboard Interativo**: Uma interface em Streamlit que permite a exploração visual dos dados, indicadores e resultados dos modelos de ML.
 
-A proposta do projeto é simular um fluxo completo de dados para licitações públicas:
+## 📊 Dashboard (Amostra)
 
-1. extração ou geração da base;
-2. limpeza e padronização dos dados;
-3. persistência em banco relacional;
-4. consultas analíticas e indicadores;
-5. expansão para detecção de anomalias, classificação de risco e agrupamento de fornecedores;
-6. visualização em dashboard.
+*Dica: Adicione aqui screenshots do seu dashboard em Streamlit. Eles são extremamente valiosos para demonstrar o resultado final do seu trabalho.*
 
-## Estrutura do Projeto
+**(Exemplo de Screenshot 1: Visão Geral)**
 
-```txt
-.
-├── dashboard/
-├── database/
-├── docs/
-├── sql/
-├── src/
-│   ├── analytics/
-│   ├── extraction/
-│   ├── loading/
-│   ├── ml/
-│   ├── transformation/
-│   └── utils/
-├── docker-compose.yml
-└── requirements.txt
+**(Exemplo de Screenshot 2: Análise de Risco e Anomalias)**
+
+## 🏛️ Arquitetura da Solução
+
+A plataforma foi projetada em camadas para garantir modularidade e escalabilidade:
+
+1.  **Extração**: Geração de dados simulados com `Faker` e `Pandas`.
+2.  **Transformação**: Limpeza, enriquecimento e feature engineering com `Python/Pandas`.
+3.  **Carga**: Persistência dos dados em `PostgreSQL` com `SQLAlchemy`, seguindo um modelo dimensional.
+4.  **Análise SQL**: Criação de views e queries analíticas para extrair insights e alimentar o dashboard.
+5.  **Machine Learning**: Aplicação de modelos de `Scikit-learn` para detecção de anomalias, classificação e clusterização.
+6.  **Visualização**: Dashboard interativo construído com `Streamlit` e `Plotly`.
+
+## 🛠️ Tecnologias Utilizadas
+
+| Categoria | Tecnologia |
+| :--- | :--- |
+| **Linguagem** | Python 3 |
+| **Engenharia de Dados** | Pandas, SQLAlchemy, Docker, PostgreSQL |
+| **Ciência de Dados** | Scikit-learn (IsolationForest, KMeans), Pandas |
+| **Dashboard** | Streamlit, Plotly Express |
+| **Utilitários** | Faker (geração de dados), Dotenv |
+
+## 🚀 Como Executar o Projeto
+
+Siga os passos abaixo para configurar e executar o ambiente localmente.
+
+### Pré-requisitos
+
+- Docker e Docker Compose
+- Python 3.8+
+
+### 1. Clonar o Repositório
+
+```bash
+git clone https://github.com/seu-usuario/licitacoes-risk-intelligence-platform.git
+cd licitacoes-risk-intelligence-platform
 ```
 
-## Tecnologias
+### 2. Configurar Variáveis de Ambiente
 
-- Python
-- Pandas
-- SQLAlchemy
-- PostgreSQL
-- Docker
-- Streamlit
-- Scikit-learn
-
-## Como Executar
-
-### 1. Preparar o ambiente
-
-Crie e ajuste o arquivo `.env` com as variáveis de conexão:
+Crie um arquivo `.env` na raiz do projeto, copiando o conteúdo de `.env.example` (se houver) ou usando o exemplo abaixo:
 
 ```env
 DATABASE_URL=postgresql://admin:admin@localhost:5433/licitacoes_db
 ```
 
-Se preferir, também é possível usar:
+### 3. Instalar Dependências
 
-```env
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=admin
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5433
-POSTGRES_DB=licitacoes_db
+```bash
+pip install -r requirements.txt
 ```
 
-### 2. Subir o banco
+### 4. Iniciar os Serviços com Docker
+
+Este comando irá iniciar os contêineres do PostgreSQL e do pgAdmin.
 
 ```bash
 docker compose up -d
 ```
 
-### 3. Gerar ou preparar a base
+### 5. Executar a Pipeline de Dados
 
-Execute a etapa de extração para criar a base bruta, quando necessário.
-
-### 4. Transformar os dados
+Execute os scripts na ordem correta para popular o banco de dados.
 
 ```bash
+# 1. Gerar dados brutos (se necessário)
+python src/extraction/extract_sample_data.py
+
+# 2. Transformar os dados
 python src/transformation/transform_licitacoes.py
-```
 
-### 5. Carregar no PostgreSQL
-
-```bash
+# 3. Carregar os dados no PostgreSQL
 python src/loading/load_to_postgres.py
 ```
 
-## Resultados Já Implementados
+### 6. Executar os Modelos de Machine Learning
 
-- padronização de campos textuais;
-- limpeza e formatação de CNPJ;
-- conversão e enriquecimento de datas;
-- cálculo de dias até homologação;
-- recálculo de diferença e percentual entre valor estimado e contratado;
-- criação de faixas de valor e faixa de variação;
-- criação de indicadores booleanos de risco;
-- montagem de dimensões e tabela fato para o modelo analítico.
+```bash
+# 1. Detecção de anomalias
+python src/ml/anomaly_detection.py
 
-## Próximos Passos
+# 2. Classificação de risco
+python src/ml/risk_classification.py
 
-O projeto segue a partir daqui com:
+# 3. Clusterização de fornecedores
+python src/ml/supplier_clustering.py
+```
 
-1. validação mais robusta dos dados carregados;
-2. evolução das consultas SQL analíticas;
-3. consolidação dos KPIs;
-4. implementação/ajuste dos modelos de machine learning;
-5. construção do dashboard final;
-6. refinamento da documentação técnica.
+### 7. Iniciar o Dashboard
 
-## Observação
-
-Este README descreve o estado atual do projeto e deixa registrado que a implementação ainda vai continuar.
-
-## Consultas analíticas SQL
-
-O projeto possui uma camada de consultas SQL voltada para análise de licitações públicas e identificação de padrões de risco.
-
-As consultas permitem analisar:
-
-- valor total contratado por órgão;
-- fornecedores mais recorrentes;
-- compras por categoria;
-- evolução mensal dos contratos;
-- contratos acima da média da categoria;
-- indicadores consolidados por nível de risco;
-- ranking geral de risco;
-- concentração entre fornecedores e órgãos públicos.
-
-Também foi criada uma view analítica chamada:
-
-`vw_licitacoes_analytics`
-
-Essa view consolida a tabela fato com as dimensões, facilitando o consumo dos dados pelo dashboard e por ferramentas analíticas.
-
-## Dashboard em Streamlit
-
-O projeto possui um dashboard interativo desenvolvido em Streamlit para visualização dos principais indicadores de licitações públicas.
-
-O dashboard consome os dados diretamente do PostgreSQL a partir da view analítica `vw_licitacoes_analytics`.
-
-### Funcionalidades do dashboard
-
-- filtros por ano, órgão, categoria e nível de risco;
-- indicadores gerais de licitações;
-- valor total contratado;
-- quantidade de órgãos e fornecedores;
-- percentual de contratos de alto risco ou críticos;
-- ranking de órgãos por valor contratado;
-- fornecedores mais recorrentes;
-- distribuição por categoria;
-- evolução mensal dos contratos;
-- ranking das licitações com maior score de risco;
-- análise consolidada por fornecedor.
-
-### Executar dashboard
+Finalmente, inicie a aplicação Streamlit para visualizar os resultados.
 
 ```bash
 streamlit run dashboard/app.py
+```
 
+Acesse http://localhost:8501 no seu navegador.
 
-## Detecção de anomalias com Machine Learning
+## 💡 Próximos Passos
 
-O projeto utiliza o algoritmo Isolation Forest para identificar licitações com comportamento atípico.
+O projeto está em constante evolução. As futuras implementações incluem:
 
-Foram consideradas variáveis como:
+- **Validação de Dados**: Implementar testes de qualidade de dados com ferramentas como `Great Expectations`.
+- **Orquestração**: Adicionar um orquestrador de pipeline como `Apache Airflow` ou `Mage`.
+- **Testes**: Aumentar a cobertura de testes unitários e de integração.
+- **Otimização de Modelos**: Realizar tuning de hiperparâmetros e explorar outros algoritmos de ML.
 
-- valor estimado;
-- valor contratado;
-- diferença entre valor estimado e contratado;
-- percentual de diferença;
-- score de risco;
-- frequência do fornecedor;
-- frequência do órgão;
-- média de valor por categoria;
-- percentual acima da média da categoria.
+---
 
-O resultado da análise é salvo em:
-
-`data/processed/licitacoes_anomaly_detection.csv`
-
-Essa etapa permite identificar possíveis contratos fora do padrão, apoiando análises de auditoria, compliance e controle interno.
-
-## Classificação de risco
-
-Além da detecção de anomalias, o projeto possui uma etapa de classificação de risco das licitações.
-
-A classificação combina regras de negócio com o resultado do modelo de anomalias, considerando fatores como:
-
-- score de risco inicial;
-- anomalia detectada pelo modelo;
-- diferença percentual entre valor estimado e contratado;
-- valor contratado;
-- frequência do fornecedor;
-- modalidade da licitação;
-- status da licitação.
-
-O resultado gera novas colunas analíticas, como:
-
-- `ml_score_risco_final`;
-- `ml_nivel_risco_final`;
-- `prioridade_auditoria`;
-- `motivos_risco`.
-
-O arquivo final é salvo em:
-
-`data/processed/licitacoes_risk_classification.csv`
+*Este projeto foi desenvolvido como um portfólio para demonstrar habilidades em Engenharia e Ciência de Dados. Sinta-se à vontade para explorar, testar e entrar em contato!*
