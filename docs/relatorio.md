@@ -158,3 +158,32 @@ O trabalho ainda não está concluído. A próxima fase deve focar na consolida�
 ## 12. Conclusão Parcial
 
 Este relatório representa o estágio atual do projeto e serve como base para a continuação do desenvolvimento. A solução já possui a espinha dorsal da pipeline, mas ainda depende de etapas de refinamento, validação e visualização para atingir a versão final.
+
+## 17. Camada Analítica com SQL
+
+Após a carga dos dados no PostgreSQL, foi criada uma camada analítica utilizando SQL. Essa camada permite explorar os dados de licitações a partir de diferentes perspectivas, como órgão público, fornecedor, categoria, tempo e risco.
+
+## 18. Consultas Criadas
+
+Foram criadas consultas para responder perguntas analíticas relevantes, como:
+
+- quais órgãos concentram maior valor contratado;
+- quais fornecedores aparecem com maior recorrência;
+- quais categorias possuem maior volume financeiro;
+- como os contratos evoluem ao longo do tempo;
+- quais contratos possuem valores muito acima da média da categoria;
+- qual a distribuição dos contratos por nível de risco;
+- quais licitações aparecem no topo do ranking de risco;
+- onde existe maior concentração entre fornecedor e órgão.
+
+## 19. View Analítica
+
+Também foi criada a view `vw_licitacoes_analytics`, consolidando informações da tabela fato e das dimensões.
+
+Essa view facilita o consumo dos dados em ferramentas de BI, dashboards e scripts de ciência de dados, evitando a repetição de joins complexos em diferentes análises.
+
+## 20. Resultado da Etapa
+
+Ao final desta etapa, o projeto passou a contar com uma camada SQL estruturada, permitindo análises de auditoria, compliance e inteligência em compras públicas.
+
+Essa etapa reforça a proposta do projeto como uma solução completa de dados, integrando modelagem dimensional, banco relacional e consultas analíticas.

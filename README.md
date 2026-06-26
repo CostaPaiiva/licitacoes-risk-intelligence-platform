@@ -121,3 +121,24 @@ O projeto segue a partir daqui com:
 ## Observação
 
 Este README descreve o estado atual do projeto e deixa registrado que a implementação ainda vai continuar.
+
+## Consultas analíticas SQL
+
+O projeto possui uma camada de consultas SQL voltada para análise de licitações públicas e identificação de padrões de risco.
+
+As consultas permitem analisar:
+
+- valor total contratado por órgão;
+- fornecedores mais recorrentes;
+- compras por categoria;
+- evolução mensal dos contratos;
+- contratos acima da média da categoria;
+- indicadores consolidados por nível de risco;
+- ranking geral de risco;
+- concentração entre fornecedores e órgãos públicos.
+
+Também foi criada uma view analítica chamada:
+
+`vw_licitacoes_analytics`
+
+Essa view consolida a tabela fato com as dimensões, facilitando o consumo dos dados pelo dashboard e por ferramentas analíticas.
