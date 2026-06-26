@@ -1,371 +1,239 @@
-# Relatório Técnico - Licitações Risk Intelligence Platform
+# Relatório Técnico - Licitacoes Risk Intelligence Platform
 
-## 1. Introdução
+## 1. Resumo executivo
 
-Este documento registra o estado atual do projeto Licitações Risk Intelligence Platform. A solução foi pensada para apoiar análise de risco em licitações públicas por meio de uma pipeline de dados com etapas de extração, transformação, carga, consulta analítica e evolução para inteligência preditiva.
+O projeto Licitacoes Risk Intelligence Platform foi desenvolvido como uma solução end-to-end para análise de risco em licitações públicas. A proposta central é transformar dados brutos em informação analítica de alto valor, permitindo investigar padrões de contratação, identificar comportamentos atípicos e apoiar priorização de auditoria e compliance.
 
-O projeto ainda está em andamento. Este relatório descreve o que já foi implementado até aqui e deixa explícito que a continuidade virá em novas etapas.
+A solução integra geração de dados, tratamento, modelagem dimensional, carga em PostgreSQL, camada SQL analítica, modelos de machine learning e dashboard interativo. O resultado é uma plataforma completa para exploração técnica e apresentação executiva.
 
-## 2. Objetivo
+## 2. Contexto e problema de negócio
 
-O objetivo principal é estruturar uma base analítica capaz de apoiar auditoria, compliance, controle interno e exploração de padrões relevantes em contratos públicos.
+Em ambientes de compras públicas, equipes de auditoria e controle interno lidam com volume elevado de processos, múltiplos fornecedores e restrições de tempo para análise manual. Nesse cenário, o desafio não é apenas armazenar os dados, mas organizar sinais relevantes para apoiar decisão.
 
-A plataforma busca responder perguntas como:
+Este projeto foi estruturado para responder perguntas como:
 
 - quais órgãos concentram maior volume financeiro;
-- quais fornecedores aparecem com mais frequência;
-- quais contratações ficam acima do valor estimado;
-- quais categorias concentram mais recursos;
-- quais registros apresentam maior risco;
+- quais fornecedores se repetem com maior frequência;
+- quais contratos apresentam valores acima do estimado;
+- quais categorias concentram maior exposição financeira;
+- quais licitações merecem maior prioridade de auditoria;
 - onde há indícios de anomalia ou comportamento atípico.
 
-## 3. Escopo Implementado Até Agora
+## 3. Objetivo do projeto
 
-Até este ponto, o projeto já possui:
+O objetivo principal é construir uma base analítica confiável e interpretável para apoiar a análise de risco em licitações públicas.
 
-- geração e preparação de uma base bruta de licitações;
-- transformação dos dados com limpeza e enriquecimento;
-- carga para PostgreSQL com modelo dimensional;
-- scripts SQL para análises;
-- base de apoio para indicadores e modelos de machine learning;
-- documentação técnica em progresso.
+Os objetivos específicos são:
 
-## 4. Arquitetura
+- estruturar um pipeline de dados reproduzível;
+- modelar os dados em formato dimensional para consumo analítico;
+- criar consultas SQL voltadas à exploração executiva;
+- aplicar machine learning para detecção de anomalias e segmentação de fornecedores;
+- disponibilizar os resultados em um dashboard interativo.
 
-A arquitetura foi organizada em camadas:
+## 4. Escopo implementado
 
-1. extração;
-2. transformação;
-3. carga;
-4. banco relacional;
-5. analytics;
-6. modelos de machine learning;
-7. dashboard.
+Até o momento, o projeto cobre a maior parte da cadeia analítica:
 
-Essa estrutura permite evoluir o projeto sem acoplamento excessivo entre as etapas.
+- geração de base simulada de licitações;
+- limpeza, padronização e feature engineering;
+- carga em PostgreSQL com arquitetura dimensional;
+- consultas SQL analíticas para exploração dos dados;
+- detecção de anomalias com machine learning;
+- classificação final de risco com regras de negócio e sinal estatístico;
+- clusterização de fornecedores;
+- dashboard em Streamlit para visualização dos resultados.
 
-## 5. Extração e Geração de Dados
+## 5. Arquitetura da solução
 
-A base inicial do projeto é composta por dados simulados de licitações públicas, produzidos para permitir testes da pipeline e validação do fluxo analítico.
+A arquitetura foi organizada em camadas para reduzir acoplamento e facilitar evolução:
 
-Os registros contemplam informações como:
+1. extração e geração dos dados;
+2. transformação e enriquecimento;
+3. carga em banco relacional;
+4. camada analítica SQL;
+5. modelagem e classificação de risco;
+6. dashboard interativo.
 
-- órgão;
-- fornecedor;
-- CNPJ;
-- categoria;
-- valores;
-- datas;
-- modalidade;
-- status;
-- score de risco;
-- nível de risco.
+Essa separação torna o projeto mais fácil de manter, testar e explicar em contexto técnico.
 
-## 6. Transformação dos Dados
+## 6. Extração e geração de dados
 
-A etapa de transformação foi implementada em Python com foco em padronização, consistência e criação de colunas auxiliares.
+A base utilizada no projeto foi gerada de forma simulada para permitir a validação completa do fluxo. A composição dos dados contempla entidades comuns ao domínio de licitações públicas, como órgão, fornecedor, categoria, valores, datas, modalidade, status e score de risco.
 
-Os principais tratamentos realizados são:
+Os registros foram desenhados para refletir diferentes perfis de comportamento, incluindo fornecedores recorrentes, contratos de maior valor e casos com potencial de anomalia.
+
+## 7. Transformação e enriquecimento
+
+A etapa de transformação foi implementada em Python com foco em consistência, padronização e criação de atributos analíticos.
+
+Os principais tratamentos realizados foram:
 
 - normalização de campos textuais;
-- limpeza de CNPJ;
-- formatação de CNPJ para exibição;
-- conversão de datas;
+- limpeza e formatação de CNPJ;
+- conversão e padronização de datas;
 - criação de colunas temporais;
 - cálculo de dias entre publicação e homologação;
-- conversão de colunas numéricas;
-- remoção de registros inválidos;
-- recálculo da diferença entre valor estimado e contratado;
-- criação de faixas de valor;
-- criação de faixas de variação percentual;
-- criação de indicadores booleanos de risco.
+- conversão de valores numéricos;
+- validação de colunas obrigatórias;
+- criação de faixas de valor e variação percentual;
+- geração de indicadores auxiliares para análise de risco.
 
-## 7. Carga no PostgreSQL
+Essa etapa melhora a qualidade da base e prepara os dados para consumo em SQL, dashboard e modelos de machine learning.
 
-A carga está estruturada em modelo dimensional, com tabelas de dimensão e tabela fato.
+## 8. Carga e modelagem em PostgreSQL
 
-Dimensões previstas/implementadas no pipeline:
+A carga foi estruturada em um modelo dimensional com tabelas de dimensão e tabela fato, favorecendo consultas analíticas e relatórios executivos.
 
-- dimensão de órgão;
-- dimensão de fornecedor;
-- dimensão de categoria;
-- dimensão de localidade;
-- dimensão de tempo.
+### 8.1 Dimensões
 
-A tabela fato consolida os registros de licitações com as chaves das dimensões e os principais atributos analíticos.
+- `dim_orgao`
+- `dim_fornecedor`
+- `dim_categoria`
+- `dim_localidade`
+- `dim_tempo`
 
-## 8. Banco de Dados
+### 8.2 Fato
 
-A conexão com o banco está centralizada em `src/utils/database.py`, permitindo o uso de:
+- `fato_licitacoes`
 
-- `DATABASE_URL` como conexão única;
-- ou variáveis separadas `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT` e `POSTGRES_DB`.
+A modelagem em estrela reduz complexidade de consulta, melhora legibilidade do modelo e facilita o consumo por camadas superiores, como SQL analítico e dashboard.
 
-A base foi pensada para rodar com PostgreSQL via Docker, o que facilita reprodução local do ambiente.
+## 9. Camada analítica SQL
 
-## 9. Estrutura Analítica
+Após a carga dos dados, foi criada uma camada de consultas SQL para apoiar a análise exploratória e a geração de indicadores.
 
-Foram adicionados scripts SQL para consultas que apoiam a análise do projeto, incluindo:
+As consultas contemplam temas como:
 
-- total por órgão;
+- valor total por órgão;
 - fornecedores recorrentes;
 - compras por categoria;
 - evolução mensal;
 - contratos acima da média;
-- indicadores de risco.
+- indicadores de risco;
+- ranking de licitações com maior risco;
+- concentração fornecedor-órgão.
 
-## 10. Base para Continuidade
+Também foi criada a view `vw_licitacoes_analytics`, que consolida os principais campos necessários para consumo por ferramentas analíticas e pela aplicação Streamlit.
 
-O projeto já deixou pronta a fundação para continuar com as próximas entregas:
+Essa camada reduz a repetição de joins complexos e centraliza a lógica de leitura usada pelo dashboard.
 
-### 10.1 Consolidação dos dados
+## 10. Machine learning aplicado
 
-- validar cargas;
-- revisar integridade das chaves;
-- estabilizar a modelagem final;
-- revisar nomes de colunas e regras de negócio.
+O projeto incorpora uma etapa de ciência de dados voltada à geração de sinais analíticos mais sofisticados.
 
-### 10.2 Camada de analytics
+### 10.1 Detecção de anomalias
 
-- aprofundar os KPIs;
-- revisar métricas de volume, concentração e risco;
-- consolidar queries para apoio ao dashboard.
+Foi utilizado o algoritmo `IsolationForest` para identificar licitações com comportamento atípico em relação ao conjunto analisado. A modelagem considera variáveis financeiras e comportamentais, como:
 
-### 10.3 Machine Learning
+- valor estimado;
+- valor contratado;
+- diferença de valor;
+- percentual de diferença;
+- score de risco original;
+- frequência de fornecedor;
+- frequência de órgão;
+- média de valor por categoria;
+- percentual acima da média da categoria.
 
-- ajustar modelos de classificação de risco;
-- evoluir a detecção de anomalias;
-- testar agrupamento de fornecedores;
-- revisar features e métricas de avaliação.
+O resultado gera uma marcação de anomalia e um score associado ao comportamento observado.
 
-### 10.4 Dashboard
+### 10.2 Classificação final de risco
 
-- integrar as consultas ao painel;
-- revisar UX e organização visual;
-- priorizar os indicadores principais do projeto.
+Após a detecção de anomalias, foi criada uma classificação final de risco combinando:
 
-## 11. Resultado Parcial
+- score de risco original;
+- resultado do modelo de anomalia;
+- diferença percentual entre valor estimado e contratado;
+- valor contratado;
+- recorrência de fornecedor;
+- modalidade de licitação;
+- status do processo.
 
-Até aqui, o projeto já cobre a cadeia principal de engenharia de dados:
+Essa abordagem aumenta a interpretabilidade do resultado final e aproxima a solução do uso real em auditoria e compliance.
 
-- entrada dos dados;
-- tratamento e enriquecimento;
-- persistência em banco;
-- preparação para análise.
+### 10.3 Clusterização de fornecedores
 
-O trabalho ainda não está concluído. A próxima fase deve focar na consolidação analítica, no refinamento dos modelos e na construção da interface final.
+Também foi aplicada a técnica `KMeans` para agrupar fornecedores com perfis semelhantes. A clusterização usa variáveis agregadas por fornecedor, como:
 
-## 12. Conclusão Parcial
+- total de contratos;
+- total de órgãos atendidos;
+- total de categorias atendidas;
+- valor total contratado;
+- valor médio do contrato;
+- score médio de risco;
+- total de anomalias;
+- percentual de contratos de alto ou crítico risco.
 
-Este relatório representa o estágio atual do projeto e serve como base para a continuação do desenvolvimento. A solução já possui a espinha dorsal da pipeline, mas ainda depende de etapas de refinamento, validação e visualização para atingir a versão final.
+Os grupos formados ajudam a identificar perfis como fornecedor recorrente, fornecedor de alto valor, fornecedor de baixo risco e fornecedor com atenção especial.
 
-## 17. Camada Analítica com SQL
+## 11. Dashboard analítico
 
-Após a carga dos dados no PostgreSQL, foi criada uma camada analítica utilizando SQL. Essa camada permite explorar os dados de licitações a partir de diferentes perspectivas, como órgão público, fornecedor, categoria, tempo e risco.
+Os resultados do pipeline, da modelagem e dos modelos foram disponibilizados em um dashboard construído com Streamlit e Plotly.
 
-## 18. Consultas Criadas
+O dashboard foi organizado em abas para apoiar navegação rápida entre os principais pontos de análise:
 
-Foram criadas consultas para responder perguntas analíticas relevantes, como:
+- visão geral;
+- anomalias;
+- classificação de risco;
+- fornecedores.
 
-- quais órgãos concentram maior valor contratado;
-- quais fornecedores aparecem com maior recorrência;
-- quais categorias possuem maior volume financeiro;
-- como os contratos evoluem ao longo do tempo;
-- quais contratos possuem valores muito acima da média da categoria;
-- qual a distribuição dos contratos por nível de risco;
-- quais licitações aparecem no topo do ranking de risco;
-- onde existe maior concentração entre fornecedor e órgão.
+Os indicadores exibidos incluem:
 
-## 19. View Analítica
+- total de licitações;
+- valor total contratado;
+- valor médio contratado;
+- total de fornecedores;
+- total de órgãos;
+- percentual de risco alto/crítico.
 
-Também foi criada a view `vw_licitacoes_analytics`, consolidando informações da tabela fato e das dimensões.
+## 12. Resultados alcançados
 
-Essa view facilita o consumo dos dados em ferramentas de BI, dashboards e scripts de ciência de dados, evitando a repetição de joins complexos em diferentes análises.
+O projeto já demonstra uma cadeia analítica completa, com entrega funcional em múltiplas camadas.
 
-## 20. Resultado da Etapa
+Resultados atuais:
 
-Ao final desta etapa, o projeto passou a contar com uma camada SQL estruturada, permitindo análises de auditoria, compliance e inteligência em compras públicas.
+- base com 1.500 registros simulados de licitações;
+- 110 fornecedores clusterizados;
+- 9 consultas SQL analíticas;
+- view consolidada para consumo do dashboard;
+- classificação final de risco com motivos explicáveis;
+- dashboard interativo pronto para exploração.
 
-Essa etapa reforça a proposta do projeto como uma solução completa de dados, integrando modelagem dimensional, banco relacional e consultas analíticas.
+## 13. Qualidade e interpretabilidade
 
-## 21. Dashboard Analítico
+Um ponto importante do projeto é a preocupação com interpretabilidade. Em vez de limitar a solução a um modelo preditivo isolado, o fluxo combina regras de negócio, indicadores objetivos e sinal estatístico.
 
-Após a criação da camada analítica SQL, foi desenvolvido um dashboard interativo utilizando Streamlit e Plotly.
+Isso torna os resultados mais úteis para contexto de negócio, principalmente em auditoria, compliance e priorização de análise.
 
-O objetivo do dashboard é permitir a análise visual dos principais indicadores relacionados às licitações públicas, facilitando a identificação de padrões financeiros, fornecedores recorrentes, concentração de contratos e níveis de risco.
+## 14. Limitações atuais
 
-## 22. Indicadores do Dashboard
+Como toda solução em evolução, o projeto ainda possui pontos a serem aprimorados:
 
-O dashboard apresenta os seguintes indicadores:
+- validação automatizada de dados;
+- testes unitários e de integração;
+- orquestração formal do pipeline;
+- versionamento de modelos;
+- monitoramento de qualidade e drift;
+- publicação em ambiente cloud.
 
-| Indicador | Descrição |
-|---|---|
-| Total de licitações | Quantidade total de registros analisados |
-| Valor total contratado | Soma dos valores contratados |
-| Valor médio contratado | Média dos valores contratados |
-| Total de fornecedores | Quantidade de fornecedores distintos |
-| Total de órgãos | Quantidade de órgãos públicos distintos |
-| Risco alto/crítico | Percentual de licitações classificadas como alto ou crítico risco |
+Essas melhorias estão alinhadas com a evolução natural de uma solução analítica mais madura.
 
-## 23. Visualizações Criadas
+## 15. Próximos passos
 
-As principais visualizações desenvolvidas foram:
+As próximas entregas planejadas incluem:
 
-- top 10 órgãos por valor contratado;
-- top 10 fornecedores recorrentes;
-- distribuição de valores por categoria;
-- distribuição por nível de risco;
-- evolução mensal dos contratos;
-- ranking das licitações com maior score de risco;
-- análise consolidada por fornecedor.
+- expansão da camada de testes;
+- validação de dados com Great Expectations ou Pandera;
+- orquestração com Airflow, Prefect ou Mage;
+- refinamento de features e métricas dos modelos;
+- melhoria da experiência visual do dashboard;
+- publicação em infraestrutura gerenciada.
 
-## 24. Resultado da Etapa
+## 16. Conclusão
 
-Com o dashboard, o projeto passa a ter uma camada visual interativa, permitindo que os dados processados e armazenados no PostgreSQL sejam explorados de maneira simples e profissional.
+O Licitacoes Risk Intelligence Platform já se apresenta como uma solução analítica completa, integrando engenharia de dados, modelagem dimensional, SQL, machine learning e visualização.
 
-Essa etapa transforma o projeto em uma solução analítica completa, integrando pipeline de dados, banco relacional, SQL analítico e visualização.
+O principal valor do projeto está na capacidade de transformar dados públicos em sinais acionáveis para análise de risco, apoiando decisões mais rápidas, consistentes e interpretáveis.
 
-## 25. Detecção de Anomalias com Machine Learning
-
-Após a criação do pipeline de dados, da modelagem dimensional, das consultas SQL e do dashboard, foi adicionada uma etapa de Ciência de Dados voltada para detecção de anomalias.
-
-O objetivo dessa etapa é identificar licitações com comportamento atípico em relação ao conjunto de dados analisado.
-
-## 26. Algoritmo Utilizado
-
-Foi utilizado o algoritmo Isolation Forest, técnica de aprendizado não supervisionado voltada para identificação de observações incomuns em bases de dados.
-
-No contexto do projeto, o modelo foi aplicado para detectar licitações que apresentam padrões financeiros ou comportamentais fora do esperado.
-
-## 27. Variáveis Utilizadas
-
-As principais variáveis utilizadas pelo modelo foram:
-
-| Variável | Descrição |
-|---|---|
-| valor_estimado | Valor previsto inicialmente para a licitação |
-| valor_contratado | Valor efetivamente contratado |
-| diferenca_valor | Diferença entre valor contratado e estimado |
-| percentual_diferenca | Diferença percentual entre os valores |
-| score_risco | Pontuação inicial de risco |
-| frequencia_fornecedor | Quantidade de contratos associados ao fornecedor |
-| frequencia_orgao | Quantidade de contratos associados ao órgão |
-| media_valor_categoria | Média de valor contratado da categoria |
-| percentual_acima_media_categoria | Percentual acima ou abaixo da média da categoria |
-
-## 28. Resultado da Etapa
-
-O modelo gerou novas colunas analíticas indicando se a licitação foi classificada como anomalia e qual o nível de alerta associado.
-
-O resultado foi salvo no arquivo:
-
-`data/processed/licitacoes_anomaly_detection.csv`
-
-Essa etapa fortalece o projeto ao adicionar uma camada de Ciência de Dados aplicada à análise de risco em licitações públicas.
-
-## 29. Classificação Final de Risco
-
-Após a detecção de anomalias, foi criada uma etapa de classificação final de risco. Essa etapa combina o score inicial da base, o resultado do modelo de anomalias e regras adicionais de negócio.
-
-O objetivo é transformar os indicadores técnicos em uma classificação mais interpretável para auditoria, compliance e tomada de decisão.
-
-## 30. Critérios Utilizados
-
-A classificação final considera:
-
-| Critério | Justificativa |
-|---|---|
-| Score de risco inicial | Representa a primeira avaliação baseada em regras |
-| Anomalia detectada pelo modelo | Indica comportamento estatisticamente atípico |
-| Diferença percentual | Mede quanto o valor contratado se distancia do estimado |
-| Valor contratado | Contratos de maior valor exigem maior atenção |
-| Frequência do fornecedor | Fornecedores recorrentes podem indicar concentração |
-| Modalidade | Dispensa e inexigibilidade exigem maior atenção analítica |
-| Status | Licitações canceladas, suspensas ou revogadas podem indicar sensibilidade |
-
-## 31. Saídas Geradas
-
-A etapa gera as seguintes colunas:
-
-| Coluna | Descrição |
-|---|---|
-| ml_score_risco_final | Pontuação final de risco |
-| ml_nivel_risco_final | Classificação final em Baixo, Médio, Alto ou Crítico |
-| prioridade_auditoria | Nível de prioridade para análise |
-| motivos_risco | Explicação textual dos principais fatores de risco |
-
-## 32. Resultado da Etapa
-
-O resultado da classificação final de risco foi salvo no arquivo:
-
-`data/processed/licitacoes_risk_classification.csv`
-
-Essa etapa torna o projeto mais interpretável, pois não apenas identifica riscos, mas também explica os principais motivos associados a cada licitação.
-
-## 33. Clusterização de Fornecedores
-
-Além da detecção de anomalias e da classificação de risco, foi criada uma etapa de clusterização de fornecedores utilizando KMeans.
-
-O objetivo dessa etapa é identificar grupos de fornecedores com comportamentos semelhantes, permitindo análises sobre recorrência, concentração, valor financeiro e exposição a riscos.
-
-## 34. Variáveis Utilizadas na Clusterização
-
-A clusterização foi construída a partir de uma base agregada por fornecedor.
-
-As principais variáveis utilizadas foram:
-
-| Variável | Descrição |
-|---|---|
-| total_contratos | Quantidade de contratos associados ao fornecedor |
-| total_orgaos | Quantidade de órgãos públicos atendidos |
-| total_categorias | Quantidade de categorias atendidas |
-| valor_total_contratado | Soma total dos contratos do fornecedor |
-| valor_medio_contrato | Valor médio dos contratos |
-| maior_contrato | Maior contrato identificado |
-| score_medio_original | Média do score inicial de risco |
-| score_medio_final | Média do score final de risco |
-| total_anomalias | Quantidade de contratos classificados como anomalia |
-| contratos_alto_critico | Quantidade de contratos com risco alto ou crítico |
-| contratos_criticos | Quantidade de contratos críticos |
-| percentual_anomalias | Percentual de contratos classificados como anomalia |
-| percentual_alto_critico | Percentual de contratos com risco alto ou crítico |
-
-## 35. Perfis Gerados
-
-Os fornecedores foram agrupados em perfis interpretáveis:
-
-| Perfil | Interpretação |
-|---|---|
-| Fornecedor recorrente | Fornecedor com presença frequente na base |
-| Fornecedor de alto valor | Fornecedor associado a contratos de maior valor financeiro |
-| Fornecedor de baixo risco | Fornecedor com comportamento mais estável |
-| Fornecedor com atenção especial | Fornecedor com maior presença de anomalias, contratos críticos ou indicadores de risco |
-
-## 36. Resultado da Etapa
-
-O resultado da clusterização foi salvo em:
-
-`data/processed/fornecedores_clusterizados.csv`
-
-Essa etapa fortalece a análise de fornecedores, permitindo identificar padrões de concentração, recorrência e exposição a risco em compras públicas.
-
-## 37. Integração dos Modelos ao Dashboard
-
-Após a criação dos modelos de detecção de anomalias, classificação de risco e clusterização de fornecedores, os resultados foram integrados ao dashboard em Streamlit.
-
-A interface foi organizada em abas para facilitar a navegação entre os diferentes tipos de análise.
-
-## 38. Abas do Dashboard
-
-| Aba | Objetivo |
-|---|---|
-| Visão Geral | Apresenta os principais indicadores das licitações |
-| Anomalias | Mostra os registros classificados como anômalos pelo modelo |
-| Classificação de Risco | Apresenta o risco final, prioridade de auditoria e motivos de risco |
-| Fornecedores | Exibe os perfis criados pela clusterização de fornecedores |
-
-## 39. Resultado da Integração
-
-Com essa integração, o projeto passa a funcionar como uma plataforma analítica completa, reunindo engenharia de dados, banco relacional, SQL analítico, machine learning e dashboard interativo.
-
-Essa etapa fortalece a apresentação do projeto como uma solução aplicada a auditoria, compliance e inteligência em compras públicas.
+Este relatório documenta o estado atual da solução e serve como base para a continuidade do desenvolvimento.
