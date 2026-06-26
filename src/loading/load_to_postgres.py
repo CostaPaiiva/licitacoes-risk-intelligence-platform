@@ -206,6 +206,9 @@ def carregar_dim_tempo(df: pd.DataFrame, engine) -> pd.DataFrame:
         }
     )
 
+    # Garante a mesma granularidade usada na comparação com a tabela fato.
+    dim_tempo["data"] = pd.to_datetime(dim_tempo["data"]).dt.date
+
     dim_tempo.to_sql("dim_tempo", engine, if_exists="append", index=False)
 
     dim_tempo_db = pd.read_sql("SELECT * FROM dim_tempo", engine)
@@ -228,6 +231,7 @@ def montar_fato_licitacoes(
     """
     # Parte da base tratada e resolve as chaves surrogate de cada dimensão.
     fato = df.copy()
+    fato["data_publicacao"] = pd.to_datetime(fato["data_publicacao"]).dt.date
 
     fato = fato.merge(
         dim_orgao[["id_orgao", "nome_orgao"]],

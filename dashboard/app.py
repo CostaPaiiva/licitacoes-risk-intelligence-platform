@@ -49,7 +49,7 @@ def get_engine():
     return create_engine(get_database_url())
 
 
-@st.cache_data
+@st.cache_data(ttl=60)
 def carregar_dados() -> pd.DataFrame:
     # Carrega os dados da view analítica e armazena em cache
     # O cache _data garante que a consulta ao banco seja executada apenas uma vez
@@ -73,8 +73,15 @@ def carregar_dados() -> pd.DataFrame:
 # ============================================================
 
 # Executa a função para carregar o DataFrame principal do dashboard
+if st.sidebar.button("Atualizar dados"):
+    carregar_dados.clear()
+    st.cache_resource.clear()
+    st.rerun()
+
 df = carregar_dados()
 
+st.write("Total carregado do banco:", len(df))
+st.write(df.head())
 
 # ============================================================
 # Sidebar
@@ -91,36 +98,43 @@ niveis_risco = sorted(df["nivel_risco"].dropna().unique())
 
 # Cria os widgets de filtro multiselect na barra lateral
 anos_selecionados = st.sidebar.multiselect(
-    "Ano", # Rótulo do filtro
+    "Ano",
     options=anos,
-    default=anos,
+    default=list(anos),
 )
 
 orgaos_selecionados = st.sidebar.multiselect(
     "Órgão",
     options=orgaos,
-    default=orgaos,
+    default=list(orgaos),
 )
 
 categorias_selecionadas = st.sidebar.multiselect(
     "Categoria",
     options=categorias,
-    default=categorias,
+    default=list(categorias),
 )
 
 riscos_selecionados = st.sidebar.multiselect(
     "Nível de risco",
     options=niveis_risco,
-    default=niveis_risco,
+    default=list(niveis_risco),
 )
 
 # Aplica os filtros selecionados ao DataFrame principal
-df_filtrado = df[
-    (df["ano"].isin(anos_selecionados))
-    & (df["nome_orgao"].isin(orgaos_selecionados))
-    & (df["categoria"].isin(categorias_selecionadas))
-    & (df["nivel_risco"].isin(riscos_selecionados))
-]
+df_filtrado = df.copy()
+
+if anos_selecionados:
+    df_filtrado = df_filtrado[df_filtrado["ano"].isin(anos_selecionados)]
+
+if orgaos_selecionados:
+    df_filtrado = df_filtrado[df_filtrado["nome_orgao"].isin(orgaos_selecionados)]
+
+if categorias_selecionadas:
+    df_filtrado = df_filtrado[df_filtrado["categoria"].isin(categorias_selecionadas)]
+
+if riscos_selecionados:
+    df_filtrado = df_filtrado[df_filtrado["nivel_risco"].isin(riscos_selecionados)]
 
 
 # ============================================================
