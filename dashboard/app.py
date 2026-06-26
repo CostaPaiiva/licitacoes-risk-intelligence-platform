@@ -17,7 +17,6 @@ load_dotenv()
 # Configurações da página principal do Streamlit
 st.set_page_config(
     page_title="Licitações Risk Intelligence",  # Título da página exibido no navegador
-    page_icon="📊",  # Ícone da página (favicon)
     layout="wide",  # Define o layout da página como "wide" (mais largo)
 )
 
@@ -145,7 +144,7 @@ df_fornecedores = carregar_clusters_fornecedores()
 # ============================================================
 
 # Define o título principal da aplicação
-st.title("📊 Licitações Risk Intelligence Platform")
+st.title(" Licitações Risk Intelligence Platform")
 
 # Adiciona uma descrição em Markdown
 st.markdown(

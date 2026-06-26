@@ -1,171 +1,161 @@
 # Licitacoes Risk Intelligence Platform
 
-Plataforma end-to-end para analise de risco em licitacoes publicas, desenvolvida como projeto de portfolio para demonstrar capacidade pratica em engenharia de dados, analytics engineering, machine learning aplicado e data apps.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit" />
+</p>
 
-O projeto simula um fluxo real de dados: gera uma base de licitacoes, aplica tratamento e modelagem analitica, persiste tudo em PostgreSQL, executa regras e modelos de risco e entrega os resultados em um dashboard interativo com foco em auditoria, compliance e controle interno.
+<p align="center">
+  <img src="https://img.shields.io/badge/ML-IsolationForest%20%7C%20KMeans-111827?style=flat-square" alt="ML" />
+  <img src="https://img.shields.io/badge/Analytics-SQL%20%7C%20Star%20Schema-111827?style=flat-square" alt="Analytics" />
+  <img src="https://img.shields.io/badge/Focus-Risk%20Intelligence-111827?style=flat-square" alt="Focus" />
+  <img src="https://img.shields.io/badge/Portfolio-Data%20Engineering-111827?style=flat-square" alt="Portfolio" />
+</p>
 
-## Visao executiva
+<p align="center">
+  Plataforma end-to-end para analise de risco em licitacoes publicas, desenhada para demonstrar engenharia de dados, analytics engineering, machine learning aplicado e entrega de produto em dashboard.
+</p>
 
-Este projeto foi pensado para responder a uma pergunta objetiva de negocio: como priorizar licitacoes com maior potencial de risco usando dados, SQL e machine learning?
+## Why this project stands out
 
-Principais entregas:
+<table>
+  <tr>
+    <td>
+      <strong>End-to-end delivery</strong><br/>
+      Da geracao da base ao dashboard final, com pipeline executavel localmente.
+    </td>
+    <td>
+      <strong>Business-oriented</strong><br/>
+      Foco em auditoria, compliance e priorizacao de investigacoes.
+    </td>
+    <td>
+      <strong>Interpretabilidade</strong><br/>
+      Regras de negocio + ML + motivos de risco para apoiar decisao.
+    </td>
+  </tr>
+</table>
 
-- pipeline completo de dados, da geracao da base ao consumo analitico
-- modelo dimensional em PostgreSQL para consultas e dashboards
-- camada SQL com indicadores e view analitica dedicada
-- deteccao de anomalias com `IsolationForest`
-- score final de risco com regras de negocio + sinal do modelo
-- segmentacao de fornecedores com `KMeans`
-- dashboard em `Streamlit` para exploracao executiva e analitica
+## Tech stack
 
-## Problema de negocio
+<table>
+  <tr>
+    <td><strong>Language</strong><br/>Python 3.10+</td>
+    <td><strong>Data</strong><br/>Pandas, SQLAlchemy</td>
+    <td><strong>Database</strong><br/>PostgreSQL</td>
+    <td><strong>Containers</strong><br/>Docker, Docker Compose</td>
+  </tr>
+  <tr>
+    <td><strong>ML</strong><br/>scikit-learn, IsolationForest, KMeans</td>
+    <td><strong>Dashboard</strong><br/>Streamlit, Plotly</td>
+    <td><strong>Dataset</strong><br/>Faker, CSV pipelines</td>
+    <td><strong>Config</strong><br/>python-dotenv</td>
+  </tr>
+</table>
 
-Em cenarios de compras publicas, equipes de auditoria e compliance lidam com grande volume de processos e poucos recursos para analise manual. A proposta desta plataforma e reduzir esse atrito ao organizar sinais de risco como:
+## Executive summary
 
-- contratos muito acima do valor estimado
-- fornecedores recorrentes em excesso
-- concentracao por orgao ou categoria
-- modalidades e status com maior sensibilidade analitica
-- comportamentos atipicos identificados automaticamente
+This project answers a practical question: how do you prioritize public procurement processes with the highest risk potential using data, SQL and machine learning?
 
-## O que foi construido
+The solution simulates a realistic data flow, stores it in a dimensional model, generates analytical views, scores risk with combined rules and ML signals, and exposes the result in a dashboard for fast investigation.
 
-### 1. Engenharia de dados
+## Key outcomes
 
-- geracao de base simulada com dados brasileiros usando `Faker`
-- padronizacao de textos, datas, CNPJ e atributos temporais
-- criacao de colunas analiticas para risco, faixas de valor e variacao percentual
-- carga de dados em PostgreSQL com separacao entre dimensoes e fato
+- complete data pipeline from raw data generation to analytical consumption
+- star schema in PostgreSQL for reporting and dashboard queries
+- SQL analytics layer with dedicated views and investigation queries
+- anomaly detection with `IsolationForest`
+- final risk classification combining business rules and model output
+- supplier clustering with `KMeans`
+- interactive dashboard built with `Streamlit`
 
-### 2. Modelagem analitica
+## Core capabilities
 
-O banco segue uma estrutura em estrela para facilitar consumo em BI, SQL e aplicacoes analiticas:
+### Data engineering
 
-- `dim_orgao`
-- `dim_fornecedor`
-- `dim_categoria`
-- `dim_localidade`
-- `dim_tempo`
-- `fato_licitacoes`
+- simulated Brazilian procurement data with `Faker`
+- text, date and CNPJ normalization
+- feature engineering for risk analysis
+- dimensional load into PostgreSQL
 
-Sobre essa base, o projeto disponibiliza consultas SQL e uma view consolidada:
+### Analytics engineering
 
-- `09_view_licitacoes_analytics.sql`
-- indicadores de valor por orgao
-- fornecedores recorrentes
-- compras por categoria
-- evolucao mensal
-- contratos acima da media
-- indicadores e ranking de risco
-- concentracao fornecedor-orgao
+- star schema with `dim_orgao`, `dim_fornecedor`, `dim_categoria`, `dim_localidade`, `dim_tempo` and `fato_licitacoes`
+- analytical SQL for spend concentration, recurrence, risk ranking and monthly evolution
+- consolidated view `vw_licitacoes_analytics` for downstream consumption
 
-### 3. Machine learning aplicado
+### Machine learning
 
-#### Deteccao de anomalias
+- anomaly detection over financial and behavioral features
+- final risk score combining original score, anomaly flag and business thresholds
+- supplier profiling into operationally useful clusters
 
-O script `src/ml/anomaly_detection.py` usa `IsolationForest` com features financeiras e comportamentais para identificar licitacoes fora do padrao esperado.
+### Product layer
 
-Exemplos de sinais usados:
+- Streamlit dashboard focused on executive exploration
+- filters by year, agency, category and risk
+- views for general overview, anomalies, risk classification and suppliers
 
-- valor estimado e valor contratado
-- diferenca absoluta e percentual
-- score de risco original
-- frequencia de fornecedor e orgao
-- media de valor por categoria
-- percentual acima da media da categoria
+## Business value
 
-#### Classificacao final de risco
+This platform helps teams working with public procurement identify:
 
-O script `src/ml/risk_classification.py` combina regras de negocio com o resultado do modelo para produzir:
+- contracts far above expected values
+- recurring suppliers with concentration patterns
+- agencies with higher spend concentration
+- high-risk procurement processes requiring audit priority
+- atypical behavior that deserves review
 
-- `ml_score_risco_final`
-- `ml_nivel_risco_final`
-- `prioridade_auditoria`
-- `motivos_risco`
+## Project metrics
 
-Essa etapa aumenta interpretabilidade, o que e importante para contexto de auditoria.
+<table>
+  <tr>
+    <td align="center"><strong>1,500</strong><br/>simulated procurement records</td>
+    <td align="center"><strong>110</strong><br/>clustered suppliers</td>
+    <td align="center"><strong>9</strong><br/>SQL analytics queries</td>
+    <td align="center"><strong>1</strong><br/>analytical dashboard</td>
+  </tr>
+</table>
 
-#### Clusterizacao de fornecedores
-
-O script `src/ml/supplier_clustering.py` usa `KMeans` para agrupar fornecedores por comportamento e exposicao a risco, gerando perfis como:
-
-- fornecedor recorrente
-- fornecedor de alto valor
-- fornecedor de baixo risco
-- fornecedor com atencao especial
-
-## Dashboard
-
-O dashboard em `Streamlit` consolida a analise em quatro frentes principais:
-
-- visao geral com KPIs e filtros
-- anomalias
-- classificacao de risco
-- fornecedores e clusters comportamentais
-
-Arquivo principal:
-
-- `dashboard/app.py`
-
-## Escopo atual do dataset
-
-Os arquivos gerados no repositorio hoje demonstram o pipeline funcionando ponta a ponta com:
-
-- `1.500` registros de licitacoes simuladas
-- `110` fornecedores clusterizados
-- artefatos intermediarios e finais em `data/processed`
-
-## Stack tecnica
-
-| Camada | Tecnologias |
-| --- | --- |
-| Linguagem | Python |
-| Dados | Pandas, SQLAlchemy |
-| Banco | PostgreSQL |
-| Containerizacao | Docker, Docker Compose |
-| Machine Learning | scikit-learn |
-| Dashboard | Streamlit, Plotly |
-| Dados simulados | Faker |
-| Configuracao | python-dotenv |
-
-## Estrutura do repositorio
+## Repository structure
 
 ```text
 .
-+-- dashboard/           # app Streamlit
++-- dashboard/           # Streamlit app
 +-- data/
-|   +-- raw/             # dados brutos
-|   +-- processed/       # artefatos tratados e saidas de ML
-|   `-- sample/          # amostras
-+-- database/            # inicializacao do banco
-+-- docker/              # volume/local de persistencia
-+-- docs/                # documentacao complementar
-+-- sql/analytics/       # consultas e view analitica
+|   +-- raw/             # raw data
+|   +-- processed/       # processed data and ML outputs
+|   `-- sample/          # sample files
++-- database/            # database bootstrap
++-- docker/              # local persistence volume
++-- docs/                # supporting documentation
++-- sql/analytics/       # analytical SQL and view
 `-- src/
-    +-- extraction/      # geracao/entrada de dados
-    +-- transformation/  # limpeza e feature engineering
-    +-- loading/         # carga no PostgreSQL
-    +-- ml/              # modelos e regras de risco
-    `-- utils/           # utilitarios compartilhados
+    +-- extraction/      # data generation and ingestion
+    +-- transformation/  # cleansing and feature engineering
+    +-- loading/         # PostgreSQL load
+    +-- ml/              # risk models and clustering
+    `-- utils/           # shared utilities
 ```
 
-## Como executar localmente
+## How to run locally
 
-### Pre-requisitos
+### Prerequisites
 
 - Python 3.10+
 - Docker Desktop
 
-### 1. Clonar o repositorio
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/CostaPaiiva/licitacoes-risk-intelligence-platform.git
 cd licitacoes-risk-intelligence-platform
 ```
 
-### 2. Configurar ambiente
+### 2. Configure environment
 
-Crie um arquivo `.env` na raiz do projeto:
+Create a `.env` file at the project root:
 
 ```env
 DATABASE_URL=postgresql://admin:admin@localhost:5433/licitacoes_db
@@ -176,24 +166,24 @@ POSTGRES_PORT=5433
 POSTGRES_DB=licitacoes_db
 ```
 
-### 3. Instalar dependencias
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Subir infraestrutura
+### 4. Start infrastructure
 
 ```bash
 docker compose up -d
 ```
 
-Servicos disponiveis:
+Services available:
 
-- PostgreSQL em `localhost:5433`
-- pgAdmin em `http://localhost:8081`
+- PostgreSQL on `localhost:5433`
+- pgAdmin on `http://localhost:8081`
 
-### 5. Executar o pipeline
+### 5. Run the pipeline
 
 ```bash
 python src/extraction/extract_sample_data.py
@@ -204,36 +194,29 @@ python src/ml/risk_classification.py
 python src/ml/supplier_clustering.py
 ```
 
-### 6. Iniciar o dashboard
+### 6. Launch the dashboard
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-Aplicacao disponivel em `http://localhost:8501`.
+Open `http://localhost:8501` in your browser.
 
-## Diferenciais tecnicos
+## Differentiators
 
-- projeto organizado por camadas, com separacao clara entre extracao, transformacao, carga, SQL e ML
-- uso combinado de regras de negocio e modelo estatistico, evitando uma abordagem de caixa-preta
-- modelagem pensada para consumo analitico e nao apenas para armazenamento operacional
-- saida interpretavel para auditoria, com prioridade e motivos de risco
-- demonstracao pratica de stack recorrente em times de dados
+- clear separation between extraction, transformation, loading, analytics and ML
+- business logic translated into transparent risk signals
+- analytical design oriented to decision support, not just storage
+- portfolio-level implementation that shows technical breadth and execution quality
 
-## Evolucoes possiveis
+## Next steps
 
-- testes automatizados para pipeline e regras de risco
-- orchestracao com Airflow, Prefect ou Mage
-- validacao de dados com Great Expectations ou Pandera
-- versionamento de modelos e experimentos
-- deploy em cloud com banco gerenciado e app publica
+- automated tests for the pipeline and risk rules
+- orchestration with Airflow, Prefect or Mage
+- data validation with Great Expectations or Pandera
+- model versioning and experiment tracking
+- cloud deployment with managed database and public app
 
-## Sobre o projeto
+## Portfolio note
 
-Este repositorio foi construido como ativo de portfolio com foco em demonstrar:
-
-- estruturacao de pipelines de dados
-- modelagem analitica em SQL/PostgreSQL
-- traducao de problema de negocio em regras e features
-- aplicacao de machine learning em um caso plausivel de risco
-- entrega final orientada a consumo por usuario de negocio
+This repository is designed to show how a data project can be turned into a product narrative: a real business problem, a structured data stack, explainable risk logic and a final interface that a recruiter or hiring manager can review quickly.
