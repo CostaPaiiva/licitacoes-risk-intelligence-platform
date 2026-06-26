@@ -80,9 +80,6 @@ if st.sidebar.button("Atualizar dados"):
 
 df = carregar_dados()
 
-st.write("Total carregado do banco:", len(df))
-st.write(df.head())
-
 # ============================================================
 # Sidebar
 # ============================================================
